@@ -14,14 +14,18 @@ class IKaltura_Video(model.Schema):
     )
     
     player = schema.Choice(
-        #TODO
+        title=_('video player'),
         )
     
     categories = schema.Choice(
-        #TODO
+        title=_('Categories'),
     )
     
     tags = schema.List(
+        title=_('video summary'),
     )
     
-    file = NamedFile
+    video_file = NamedFile(
+        title=_('video file'),
+    )
+    

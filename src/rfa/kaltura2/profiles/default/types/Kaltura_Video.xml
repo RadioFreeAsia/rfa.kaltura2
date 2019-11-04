@@ -8,8 +8,8 @@
 
   <property name="content_icon">string:${portal_url}/document_icon.png</property>
 
-  <property name="factory">Kaltura_Video</property>
-  <property name="add_view_expr">string:${folder_url}/++add++Kaltura_Video</property>
+  <property name="factory">Kaltura Video</property>
+  <property name="add_view_expr">string:${folder_url}/++add++Kaltura Video</property>
   <property name="link_target"></property>
   <property name="immediate_view">view</property>
   <property name="global_allow">True</property>
