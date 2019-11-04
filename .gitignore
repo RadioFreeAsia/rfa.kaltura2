@@ -1,3 +1,5 @@
+*.wpr
+*.wpu
 .coverage
 *.egg-info
 *.log
