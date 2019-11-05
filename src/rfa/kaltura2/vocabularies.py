@@ -1,19 +1,23 @@
 """functions for populating vocabularies for various select or multiselect fields"""
+from zope.interface import provider
+from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
 
-from rfa.kaltura.controlpanel import IRfaKalturaSettings
-from rfa.kaltura.kutils import kGetPlaylistPlayers, kGetVideoPlayers
-from rfa.kaltura.kutils import kGetCategories, kGetCategoryId
-from rfa.kaltura.interfaces import IKalturaVideo
-from rfa.kaltura.interfaces import IKalturaPlaylist
+from rfa.kaltura2.controlpanel import IRfaKalturaSettings
+from rfa.kaltura2.kutils import kGetPlaylistPlayers, kGetVideoPlayers
+from rfa.kaltura2.kutils import kGetCategories, kGetCategoryId
 
+
+
+@provider(IContextSourceBinder)
 def getTagVocabulary():
     """Get Currently created tags on Kaltura server"""
     # Not implemented yet.
     pass
 
+@provider(IContextSourceBinder)
 def getCategoryVocabulary(parent=None):
     """Get Currently created Categories on Kaltura server"""
     
@@ -35,6 +39,7 @@ def getCategoryVocabulary(parent=None):
     return items
 
 
+@provider(IContextSourceBinder)
 def PlayerVocabularyFactory(context):
     players=[]
     if IKalturaVideo.providedBy(context):
