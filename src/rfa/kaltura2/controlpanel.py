@@ -20,78 +20,78 @@ class IRfaKalturaSettings(Interface):
         PRIVACY_CONTEXT
     """
 
-    partnerId = schema.Int(title=u"Partner Id",
+    partnerId = schema.Int(title="Partner Id",
                            __name__='partnerId',
-                           description=u"enter your Partner ID",
+                           description="enter your Partner ID",
                            required=True,
                            default=54321)
     
-    secret = schema.TextLine(title=u"User Secret",
-                             description=u"enter your 32-character User Secret",
+    secret = schema.TextLine(title="User Secret",
+                             description="enter your 32-character User Secret",
                              required=True,
-                             default=u"YOUR_USER_SECRET")
+                             default="YOUR_USER_SECRET")
     
-    adminSecret = schema.TextLine(title=u"Admin Secret",
-                                  description=u"enter your 32-character Admin Secret",
+    adminSecret = schema.TextLine(title="Admin Secret",
+                                  description="enter your 32-character Admin Secret",
                                   required=True,
-                                  default=u"YOUR_ADMIN_SECRET")
+                                  default="YOUR_ADMIN_SECRET")
     
-    serviceUrl =  schema.TextLine(title=u"Service URL",
-                                  description=u"enter your service url",
+    serviceUrl =  schema.TextLine(title="Service URL",
+                                  description="enter your service url",
                                   required=True,
-                                  default=u"http://www.kaltura.com")
+                                  default="http://www.kaltura.com")
     
-    userName = schema.TextLine(title=u"User Name",
-                               description=u"enter your username on Kaltura",
+    userName = schema.TextLine(title="User Name",
+                               description="enter your username on Kaltura",
                                required=True,
-                               default=u"PloneTestUser")
+                               default="PloneTestUser")
     
-    defaultVideoPlayer = schema.TextLine(title=u"Default Video Player ID",
-                                         description=u"enter the default Player ID you wish to use when creating Kaltura Videos",
+    defaultVideoPlayer = schema.TextLine(title="Default Video Player ID",
+                                         description="enter the default Player ID you wish to use when creating Kaltura Videos",
                                          required=False,
-                                         default=u'')
+                                         default='')
     
     #defaultPlaylistPlayer = schema.TextLine(title=u"Default Playlist Player ID",
                                          #description=u"enter the default Player ID you wish to use when creating Kaltura Playlists"
                                          #required=False,
                                          #default='')
     
-    topLevelCategory = schema.TextLine(title=u"Top Level Category",
-                                       description=u"""Use this to limit this plone site to a single category on the KMC.
+    topLevelCategory = schema.TextLine(title="Top Level Category",
+                                       description="""Use this to limit this plone site to a single category on the KMC.
                                                        Enter the FULL NAME of a category on the KMC to become the top level category
                                                        for this plone site.  Only this category and sub-categories will be
                                                        visible on edit pages, and all utilities will filter results
                                                        by this category""",
                                        required=False,
-                                       default=u""
+                                       default=""
                                        )
     
-    privacyContextString = schema.TextLine(title=u"Privacy Context",
-                                           description=u"provide the privacy context if you are using entitlement settings\n Leave blank if unsure",
+    privacyContextString = schema.TextLine(title="Privacy Context",
+                                           description="provide the privacy context if you are using entitlement settings\n Leave blank if unsure",
                                            required=False,
-                                           default=u"")
+                                           default="")
     
-    storageMethod = schema.Choice(title=u"Video Storage Method",
-                                  description=u"""Choose how Plone will handle local storage of uploaded video content.
+    storageMethod = schema.Choice(title="Video Storage Method",
+                                  description="""Choose how Plone will handle local storage of uploaded video content.
                                                  "Blob" (default) will store the file locally with ZODB Blob storage.
                                                  "None" will not store the video file locally at all - the kaltura server will have the only copy known to plone.
                                               """,
                                   required=True,
-                                  default=u"Blob",
-                                  vocabulary=SimpleVocabulary.fromValues([(u'Blob'),
-                                                                          (u'No Local Storage')])
+                                  default="Blob",
+                                  vocabulary=SimpleVocabulary.fromValues([('Blob'),
+                                                                          ('No Local Storage')])
                                   )
 
-    kfileMaxSize = schema.Int(title=u"Kaltura File Max Size",
-                           description=u"Provide your maximum kaltura file size you want to set up.(unit: MB)",
+    kfileMaxSize = schema.Int(title="Kaltura File Max Size",
+                           description="Provide your maximum kaltura file size you want to set up.(unit: MB)",
                            required=False,
                            default=500)    
     
 
 class SettingsEditForm(controlpanel.RegistryEditForm):
     schema = IRfaKalturaSettings
-    label = u"rfa.kaltura settings"
-    description = u""""""
+    label = "rfa.kaltura2 settings"
+    description = """"""
     
     def updateFields(self):
         super(SettingsEditForm, self).updateFields()
@@ -119,8 +119,8 @@ class IIntWidget(z3c.form.interfaces.ITextWidget):
     
 @zope.interface.implementer_only(IIntWidget)
 class IntWidget(TextWidget):
-    klass = u'int-widget'
-    value = u''
+    klass = 'int-widget'
+    value = ''
 
 @zope.component.adapter(zope.schema.interfaces.IField, z3c.form.interfaces.IFormLayer)
 @zope.interface.implementer(z3c.form.interfaces.IFieldWidget)
@@ -142,7 +142,7 @@ class NoFormatIntegerDataConverter(converter.IntegerDataConverter):
 
     def toWidgetValue(self, value):
         if value is self.field.missing_value:
-            return u''
-        return unicode(value)
+            return ''
+        return str(value)
     
 zope.component.provideAdapter(NoFormatIntegerDataConverter)
