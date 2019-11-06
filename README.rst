@@ -21,9 +21,8 @@ Features
 Examples
 --------
 
-Most video content at www.rfa.org is stored on Kaltura but rendered through Plone CMS
-New Videos can be created in Plone and Videos can be treated like any other content type in Plone,
-yet the storage, transcoding, and html5/flash/js players are configured in Kaltura.
+Most video content at www.rfa.org is stored on Kaltura but rendered through Plone CMS.
+New Videos can be created in Plone and Videos can be treated like any other content type in Plone, yet the storage, transcoding, and html5/flash/js players are configured in Kaltura.
 
 Documentation
 -------------
