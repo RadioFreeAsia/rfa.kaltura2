@@ -1,0 +1,6 @@
+ <object name="portal_controlpanel">
+ <configlet
+        title="Kaltura"
+        action_id="rfa.kaltura2.controlpanel"
+        remove="true">
+</object>
