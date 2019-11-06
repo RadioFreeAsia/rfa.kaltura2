@@ -6,20 +6,24 @@
 rfa.kaltura2
 ============
 
-Tell me what your product does
+For creating video content in Plone CMS while leveraging the Kaltura Video Platform
 
 Features
 --------
 
-- Can be bullet points
+- Add and Upload videos through the Plone CMS
+- Use Kaltura Players for displaying videos
+- Use Kaltura as a Video DAM (Digital Asset Manager)
+- Syncronize video metadata between Kaltura KMC and Plone
+- Plone 5.2 and Python 3 compatable
 
 
 Examples
 --------
 
-This add-on can be seen in action at the following sites:
-- Is there a page on the internet where everybody can see the features?
-
+Most video content at www.rfa.org is stored on Kaltura but rendered through Plone CMS
+New Videos can be created in Plone and Videos can be treated like any other content type in Plone,
+yet the storage, transcoding, and html5/flash/js players are configured in Kaltura.
 
 Documentation
 -------------
@@ -30,9 +34,7 @@ Full documentation for end users can be found in the "docs" folder, and is also 
 Translations
 ------------
 
-This product has been translated into
-
-- Klingon (thanks, K'Plai)
+This product has yet to be translated to any language.
 
 
 Installation
@@ -54,16 +56,15 @@ and then running ``bin/buildout``
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/collective/rfa.kaltura2/issues
-- Source Code: https://github.com/collective/rfa.kaltura2
-- Documentation: https://docs.plone.org/foo/bar
+- Issue Tracker: https://github.com/RadioFreeAsia/rfa.kaltura2/issues
+- Source Code: https://github.com/RadioFreeAsia/rfa.kaltura2
+- Documentation: https://docs.plone.org/totallymissinghostingdocsatmsorry
 
 
 Support
 -------
 
-If you are having issues, please let us know.
-We have a mailing list located at: project@example.com
+If you are having issues, please let us know through the plone community forums.
 
 
 License
