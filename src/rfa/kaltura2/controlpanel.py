@@ -134,7 +134,8 @@ class NoFormatIntegerDataConverter(converter.IntegerDataConverter):
     """ data converter that ignores the formatter, 
         simply returns the unicode representation of the integer value
 
-        The base class for this calls upon the locale for a formatter.
+        The base class (converter.IntegerDataConverter) calls upon the 
+        locale for a formatter.  We don't want this!
         This completely avoids calling the locale.
     """
     
