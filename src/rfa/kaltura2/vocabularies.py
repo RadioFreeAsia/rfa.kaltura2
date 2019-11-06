@@ -53,3 +53,16 @@ def VideoPlayerVocabularyFactory(context):
     return SimpleVocabulary.fromItems(items)
 
 
+@provider(IContextSourceBinder)
+def PlaylistPlayerVocabularyFactory(context):
+    players = kGetPlaylistPlayers()
+        
+    items = []
+    for player in players:
+        #simpleVocabulary doesn't like unicode!
+        name = player.getName()
+        if isinstance(name, unicode):
+            name = name.encode('utf-8')
+        items.append( (name, str(player.getId())) )
+        
+    return SimpleVocabulary.fromItems(items)

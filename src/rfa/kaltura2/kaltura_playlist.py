@@ -3,4 +3,10 @@ from plone.supermodel import model
 from zope import schema
 
 class IKaltura_Playlist(model.Schema):
-    pass #not implemented yet
+    #not implemented yet
+    
+    #player = schema.Choice(
+        #title=_('Player'),
+        #description=_('Choose the player to use'),
+        #source=PlaylistPlayerVocabularyFactory
+        #)
