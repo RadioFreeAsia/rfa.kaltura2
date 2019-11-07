@@ -2,8 +2,12 @@ Changelog
 =========
 
 
-1.0a1 (unreleased)
+2.0a1 (unreleased)
 ------------------
 
-- Initial release.
+- Initial relase of 2.0
+  [flipmcf]
+  
+- Prior release: 'rfa.kaltura'
+  https://github.com/RadioFreeAsia/rfa.kaltura
   [flipmcf]
