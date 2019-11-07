@@ -157,8 +157,8 @@ def getTagVids(tags, limit=10, partner_id=None, filt=None):
        provide a non-string iterable as tags parameter
        provide 'filt' parameter of an existing KalturaMediaEntryFilter to filter results
     """
-    if isinstance(tags, basestring):
-        raise TypeError, "tags must be a non-string iterable"
+    if isinstance(tags, str):
+        raise TypeError("tags must be a non-string iterable")
     
     if filt is not None:
         kfilter = copy.copy(filt)
@@ -170,7 +170,7 @@ def getTagVids(tags, limit=10, partner_id=None, filt=None):
     try:
         querytags = ','.join(tags)
     except TypeError:
-        raise TypeError, "tags must be a non-string iterable"
+        raise TypeError("tags must be a non-string iterable")
     
     kfilter.setTagsMultiLikeOr(querytags)
     
@@ -205,10 +205,10 @@ def kcreateEmptyFilterForPlaylist():
     kfilter = KalturaMediaEntryFilterForPlaylist()
     
     kfilter.setLimit(30)
-    kfilter.setModerationStatusIn(u'2,5,6,1')
-    kfilter.setOrderBy(u'-plays')
-    kfilter.setStatusIn(u'2,1')
-    kfilter.setTypeIn(u'1,2,7')
+    kfilter.setModerationStatusIn('2,5,6,1')
+    kfilter.setOrderBy('-plays')
+    kfilter.setStatusIn('2,1')
+    kfilter.setTypeIn('1,2,7')
     
     return kfilter   
 
@@ -227,12 +227,12 @@ def kcreatePlaylist(context):
         maxVideos = getattr(context, 'maxVideos', DEFAULT_DYNAMIC_PLAYLIST_SIZE)
         kplaylist.setTotalResults(maxVideos)
         kfilter = kcreateEmptyFilterForPlaylist()
-        kfilter.setFreeText(u','.join(context.getTags()))
+        kfilter.setFreeText(','.join(context.getTags()))
 
-        kfilter.setCategoriesIdsMatchOr(u','.join(context.getCategories()))
+        kfilter.setCategoriesIdsMatchOr(','.join(context.getCategories()))
         kplaylist.setFilters([kfilter])
     else:
-        raise AssertionError, "%s is not a known playlist type" % (context.portal_type,)
+        raise AssertionError("%s is not a known playlist type" % (context.portal_type,))
     
     (client, session) = kconnect()
     
@@ -271,7 +271,7 @@ def kupload(FileObject, mediaEntry=None):
     
     #this check can be done better
     if not hasattr(FileObject, 'get_data'):
-        print "nothing to upload to kaltura from object %s" % (str(FileObject),)
+        print("nothing to upload to kaltura from object %s" % (str(FileObject),))
         return 1;
     
     #XXX Configure Temporary Directory and name better
