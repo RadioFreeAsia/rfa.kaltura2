@@ -4,7 +4,7 @@ from zope import schema
 from plone.namedfile.field import NamedFile
 
 from rfa.kaltura2.vocabularies import VideoPlayerVocabularyFactory
-from rfa.kaltura2.vocabularies import getCategoryVocabulary
+from rfa.kaltura2.vocabularies import CategoryVocabularyFactory
 from rfa.kaltura2.vocabularies import getTagVocabulary
 
 from rfa.kaltura2 import _
@@ -29,7 +29,7 @@ class IKaltura_Video(model.Schema):
     categories = schema.List(
         title=_('Categories'),
         description=_("Select video category(ies) this video belongs in"),
-        value_type=schema.Choice(source=getCategoryVocabulary)
+        value_type=schema.Choice(source=CategoryVocabularyFactory(None))
     )
     
     tags = schema.List(

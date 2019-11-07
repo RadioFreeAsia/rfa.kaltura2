@@ -1,6 +1,6 @@
 
 """functions for populating vocabularies for various select or multiselect fields"""
-from zope.interface import provider
+from zope.interface import provider, implementer
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.component import getUtility
@@ -16,26 +16,40 @@ def getTagVocabulary():
     # Not implemented yet.
     pass
 
-@provider(IContextSourceBinder)
-def getCategoryVocabulary(parent=None):
-    """Get Currently created Categories on Kaltura server"""
+@implementer(IContextSourceBinder)
+class CategoryVocabularyFactory(object):
     
-    items = []
-    if parent is None:
-        #check settings for 'top level category'
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IRfaKalturaSettings)
-        tlc = settings.topLevelCategory
-        if tlc:
-            parent = kGetCategoryId(categoryName=tlc)
-            #place the top-level category at the top of the list, so it's selectable.
-            items.append( (str(parent), tlc,) )
+    def __init__(self, parent=None):
+        """Parent must be a category ID from Kaltura, not a name"""
+        self.parent = parent
+        self.vocab = None
         
-    categoryObjs = kGetCategories(parent)
-    for cat in categoryObjs:
-        items.append( (str(cat.getId()), cat.getName(),) )
-        
-    return SimpleVocabulary.fromItems(items)
+    def __call__(self, context):        
+        """Get Currently created Categories on Kaltura server"""
+        if self.vocab is None: #no cache, get category list
+            items = []
+            if self.parent is None:
+                #check settings for 'top level category'
+                registry = getUtility(IRegistry)
+                settings = registry.forInterface(IRfaKalturaSettings)
+                tlc = settings.topLevelCategory
+                if tlc:
+                    parentCategoryId = kGetCategoryId(categoryName=tlc)
+                    #place the top-level category at the top of the list, so it's selectable.
+                    items.append( (str(parentCategoryId), tlc,) )
+                else:
+                    self.parentCateogyId = None #all categories
+            
+            if self.parent == 'All':
+                self.parentCategoryId = None #all categories
+                
+            categoryObjs = kGetCategories(parentCategoryId)
+            for cat in categoryObjs:
+                items.append( (str(cat.getId()), cat.getName(),) )
+            
+            self.vocab = SimpleVocabulary.fromItems(items)
+            
+        return self.vocab
 
 
 @provider(IContextSourceBinder)
