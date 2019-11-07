@@ -1,7 +1,10 @@
 from plone.autoform import directives
 from plone.supermodel import model
 from zope import schema
+
 from plone.namedfile.field import NamedFile
+
+from plone.app.z3cform.widget import AjaxSelectFieldWidget
 
 from rfa.kaltura2.vocabularies import VideoPlayerVocabularyFactory
 from rfa.kaltura2.vocabularies import CategoryVocabularyFactory
@@ -32,10 +35,17 @@ class IKaltura_Video(model.Schema):
         value_type=schema.Choice(source=CategoryVocabularyFactory(None))
     )
     
-    tags = schema.List(
+    tags = schema.Tuple(
         title=_('Tags'),
         description=_("keyword tag(s) associated with this video (one per line)"),
-        value_type=schema.Text()
+        value_type=schema.TextLine(),
+        required=False,
+        missing_value=(),
+    )
+    directives.widget(
+        'tags',
+        AjaxSelectFieldWidget,
+        vocabulary='plone.app.vocabularies.Keywords'
     )
     
     video_file = NamedFile(
