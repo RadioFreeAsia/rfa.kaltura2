@@ -7,14 +7,14 @@ from plone.namedfile.field import NamedFile
 
 from plone.app.z3cform.widget import AjaxSelectFieldWidget
 
+from rfa.kaltura2.interfaces import IKalturaMediaEntry
+
 from rfa.kaltura2.vocabularies import VideoPlayerVocabularyFactory
 from rfa.kaltura2.vocabularies import CategoryVocabularyFactory
 from rfa.kaltura2.vocabularies import getTagVocabulary
 
 from rfa.kaltura2 import _
 
-class IKalturaObject(Interface):
-    """A KalturaMediaEntry object defined by KalturaClient"""
 
 class IKaltura_Video(model.Schema):
     
@@ -66,6 +66,6 @@ class IKaltura_Video(model.Schema):
     )
     
     #This stores the python object representing the entry in the Kaltura Media Center
-    KalturaObject = schema.Object(IKalturaObject)
+    KalturaObject = schema.Object(IKalturaMediaEntry)
     
     

@@ -260,53 +260,37 @@ def kcreateVideo(context):
     
     return mediaEntry
     
-def kupload(FileObject, mediaEntry=None):
-    """Provide an ATCTFileContent based object
-       Upload attached contents to Kaltura
-       Currently Treats all objects as 'videos' - 
-         this should change when other kaltura media types are implemented.
-       If MediaEntry is provided, the uploaded video is associated with that media entry
-    """
+def uploadVideo(context):
+    """Provide the KalturaVideo with a NamedFile field.
+       This uploads the video to Kaltura and returns the upload token.
+        """
     usingEntitlements = False
     
-    #this check can be done better
-    if not hasattr(FileObject, 'get_data'):
+    #get the file field and....
+    
+    #maybe it's 'get_data'?
+    if not hasattr(context, 'get_data'):
         print("nothing to upload to kaltura from object %s" % (str(FileObject),))
         return 1;
     
     #XXX Configure Temporary Directory and name better
     #XXX Turn into a file stream from context.get_data to avoid write to file...        
     tempfh = open('/tmp/tempfile', 'wr')
-    tempfh.write(FileObject.get_data())
+    tempfh.write(context.get_data())
     tempfh.close()    
     
     #XXX Not A good idea if we plan on not using the ZODB
-    name = FileObject.Title()
-    ProviderId = FileObject.UID()  
+    name = context.Title()
+    ProviderId = context.UID()  
      
     (client, session) = kconnect()
     
-    if mediaEntry is None:
-        #create an entry
-        mediaEntry = KalturaMediaEntry()
-        mediaEntry.setName(name)
-        mediaEntry.setMediaType(KalturaMediaType(KalturaMediaType.VIDEO))
-        mediaEntry.searchProviderId = ProviderId
-        mediaEntry.setReferenceId = ProviderId
     uploadTokenId = client.media.upload(file('/tmp/tempfile', 'rb'))  
     
     os.remove('/tmp/tempfile')
-    
-    catIds = mediaEntry.getCategoriesIds()
-    if catIds is not NotImplemented:
-        catIds = catIds.split(',')
-        mediaEntry.setCategoriesIds(NotImplemented)
-    else:
-        catIds = []
-    
-    mediaEntry = client.media.addFromUploadedFile(mediaEntry, uploadTokenId)
-    KalturaLoggerInstance.log("uploaded.  MediaEntry %s" % (mediaEntry.__repr__()))
-    return mediaEntry
+  
+    KalturaLoggerInstance.log("video uploaded to kaltura: uploadTokenId %s" % (uploadTokenId,))
+    return uploadTokenId
     
 def kremoveVideo(context):
     (client, session) = kconnect()
@@ -413,5 +397,49 @@ def kSetStatus(context, status, client=None):
     
     return updateEntry
     
+    
+def syncCategories(context, client=None, categories=None):
+    
+    if categories is None:
+        categories = context.categories
+    newCatEntries = []
+    
+    if client is None:
+        (client, session) = kconnect()
+        
+    #refresh list of categories from server, and sync to plone object
+    filt = KalturaCategoryEntryFilter()
+    filt.setEntryIdEqual(context.KalturaObject.getId())
+    categoryEntries = client.categoryEntry.list(filt).objects
+
+    #current set is the set of categories on Kaltura service (remote)
+    currentSet = set([catEntry.categoryId for catEntry in categoryEntries])
+    
+    #New set is the set of categories on our context
+    newSet = set([int(catId) for catId in categories])
+        
+    #determine what categories need to be added
+    addCats = newSet.difference(currentSet)
+    
+    #determine what categories need to be removed
+    delCats = currentSet.difference(newSet)
+   
+    #do adds
+    for catId in addCats:
+        newCatEntry = KalturaCategoryEntry()
+        newCatEntry.setCategoryId(catId)
+        newCatEntry.setEntryId(context.KalturaObject.getId())
+        try:
+            client.categoryEntry.add(newCatEntry)
+        except KalturaException, e:
+            if e.code == "CATEGORY_ENTRY_ALREADY_EXISTS":
+                pass #should never happen, tho
+    
+    #do removes
+    for catId in delCats:
+        client.categoryEntry.delete(context.KalturaObject.getId(), catId)
+        
+    #sync the categories to plone object
+    context.categories = client.categoryEntry.list(filt).objects
     
     
