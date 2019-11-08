@@ -9,9 +9,11 @@
   <i18n:registerTranslations directory="locales" />
 
   <include package=".browser" />
+  <include package=".events" />
 
   <include file="permissions.zcml" />
   <include file="upgrades.zcml" />
+
   
   <!-- Control panel / configuration page -->
   <browser:page

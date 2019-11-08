@@ -1,0 +1,32 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="rfa.kaltura">
+   
+   <subscriber
+    for="rfa.kaltura2.kaltura_video.IKaltura_Video
+         zope.lifecycleevent.interfaces.IObjectAddedEvent"
+     handler=".events.addVideo"
+   />
+     
+   <subscriber
+     for="rfa.kaltura2.kaltura_video.IKaltura_Video
+          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+     handler=".events.modifyVideo"
+   />
+   
+   <subscriber
+     for="rfa.kaltura2.kaltura_video.IKaltura_Video
+          zope.lifecycleevent.IObjectRemovedEvent"
+     handler=".events.deleteVideo"
+   />
+   
+   
+   <!-- workflow -->
+   <subscriber
+      for="rfa.kaltura2.kaltura_video.IKaltura_Video
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".events.workflowChange"
+   /> 
+      
+   
+</configure>
