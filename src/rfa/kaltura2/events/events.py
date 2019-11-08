@@ -1,16 +1,37 @@
 
+from KalturaClient.Plugins.Core import KalturaEntryModerationStatus
+
 from rfa.kaltura2.kutils import kconnect
 from rfa.kaltura2.kutils import KalturaLoggerInstance as logger
-from rfa.kaltura2.kutils import kupload, kcreatePlaylist, kcreateVideo, kremoveVideo, krejectVideo
+from rfa.kaltura2.kutils import uploadVideo
+from rfa.kaltura2.kutils import rejectVideo
+from rfa.kaltura2.kutils import kcreateVideo, kremoveVideo
 from rfa.kaltura2.kutils import kdiff
-from rfa.kaltura2.kutils import kSetStatus, KalturaEntryModerationStatus
+from rfa.kaltura2.kutils import setModerationStatus
+from rfa.kaltura2.kutils import syncCategories
 
+from rfa.kaltura2.interfaces import IKalturaMediaEntry
 
 def addVideo(context, event):
     """When a video is added to a container
        zope.lifecycleevent.interfaces.IObjectAddedEvent"""
-    import pdb; pdb.set_trace()
-    pass
+    
+    #adapt the Plone video to a Kaltura Video Media Entry
+    mediaEntry = IKalturaMediaEntry(context).getEntry()
+    (client, session) = kconnect()
+    
+    #Do the upload of the video file
+    uploadToken = uploadVideo(context)
+    
+    #associate the upload with this mediaEntry
+    mediaEntry = client.media.addFromUploadedFile(mediaEntry, uploadToken.getId())
+    
+    #associate the KalturaMediaObject with the Plone Video
+    context.KalturaObject = mediaEntry
+    
+    #make sure categories set in Plone are set for this MediaEntry
+    syncCategories(context, client)
+    
         
 def modifyVideo(context, event):
     """Fired when the object is edited
@@ -24,7 +45,7 @@ def deleteVideo(context, event):
     #kremoveVideo(context)  
     
     #Now, we only reject videos deleted in plone, to support an undo action.
-    krejectVideo(context)
+    rejectVideo(context)
     
 def workflowChange(context, event):
     workflow = event.workflow
@@ -37,6 +58,6 @@ def workflowChange(context, event):
         status = KalturaEntryModerationStatus.PENDING_MODERATION
     
     if status:
-        context.setModerationStatus(status)
+        setModerationStatus(context, status)
 
     
