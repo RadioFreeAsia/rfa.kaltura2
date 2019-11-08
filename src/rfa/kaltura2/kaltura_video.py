@@ -1,6 +1,7 @@
 from plone.autoform import directives
 from plone.supermodel import model
 from zope import schema
+from zope.interface import Interface
 
 from plone.namedfile.field import NamedFile
 
@@ -11,6 +12,9 @@ from rfa.kaltura2.vocabularies import CategoryVocabularyFactory
 from rfa.kaltura2.vocabularies import getTagVocabulary
 
 from rfa.kaltura2 import _
+
+class IKalturaObject(Interface):
+    """A KalturaMediaEntry object defined by KalturaClient"""
 
 class IKaltura_Video(model.Schema):
     
@@ -52,10 +56,16 @@ class IKaltura_Video(model.Schema):
         title=_('video file'),
     )
     
-    directives.omitted('entryId') #User never interacts with this field
+    ##Hidden Fields
+    #User never interacts with these fields
+    directives.omitted('entryId', 'KalturaObject') 
     entryId = schema.Text(
         title=_('entryid'),
         description=_('Entry Id set by Kaltura after upload (read only)'),
         default=None
     )
+    
+    #This stores the python object representing the entry in the Kaltura Media Center
+    KalturaObject = schema.Object(IKalturaObject)
+    
     
