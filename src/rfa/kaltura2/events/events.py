@@ -5,26 +5,26 @@ from rfa.kaltura2.kutils import kconnect
 from rfa.kaltura2.kutils import KalturaLoggerInstance as logger
 from rfa.kaltura2.kutils import uploadVideo
 from rfa.kaltura2.kutils import rejectVideo
-from rfa.kaltura2.kutils import kcreateVideo, kremoveVideo
+from rfa.kaltura2.kutils import createVideo, removeVideo
 from rfa.kaltura2.kutils import kdiff
 from rfa.kaltura2.kutils import setModerationStatus
 from rfa.kaltura2.kutils import syncCategories
 
-from rfa.kaltura2.interfaces import IKalturaMediaEntry
+from rfa.kaltura2.adapters.kalturaMediaEntry import IKalturaMediaEntryProvider
 
 def addVideo(context, event):
     """When a video is added to a container
        zope.lifecycleevent.interfaces.IObjectAddedEvent"""
     
     #adapt the Plone video to a Kaltura Video Media Entry
-    mediaEntry = IKalturaMediaEntry(context).getEntry()
+    mediaEntry = IKalturaMediaEntryProvider(context).getEntry()
     (client, session) = kconnect()
     
     #Do the upload of the video file
-    uploadToken = uploadVideo(context)
+    uploadTokenId = uploadVideo(context, client)
     
     #associate the upload with this mediaEntry
-    mediaEntry = client.media.addFromUploadedFile(mediaEntry, uploadToken.getId())
+    mediaEntry = client.media.addFromUploadedFile(mediaEntry, uploadTokenId)
     
     #associate the KalturaMediaObject with the Plone Video
     context.KalturaObject = mediaEntry

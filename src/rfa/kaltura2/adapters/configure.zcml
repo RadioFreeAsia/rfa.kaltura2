@@ -2,8 +2,8 @@
 
 <adapter
     for="rfa.kaltura2.kaltura_video.IKaltura_Video"
-    provides="rfa.kaltura2.interfaces.IKalturaMediaEntryProvider"
-    factory="kalturaMediaEntry.Kaltura_VideoMediaEntryProvider"
+    provides="rfa.kaltura2.adapters.kalturaMediaEntry.IKalturaMediaEntryProvider"
+    factory="rfa.kaltura2.adapters.kalturaMediaEntry.Kaltura_VideoMediaEntryProvider"
     />
 
 </configure>

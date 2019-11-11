@@ -3,7 +3,7 @@ from plone.supermodel import model
 from zope import schema
 from zope.interface import Interface
 
-from plone.namedfile.field import NamedFile
+from plone.namedfile.field import NamedFile, NamedBlobFile
 
 from plone.app.z3cform.widget import AjaxSelectFieldWidget
 
@@ -52,7 +52,7 @@ class IKaltura_Video(model.Schema):
         vocabulary='plone.app.vocabularies.Keywords'
     )
     
-    video_file = NamedFile(
+    video_file = NamedBlobFile(
         title=_('video file'),
     )
     

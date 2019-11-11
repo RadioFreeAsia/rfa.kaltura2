@@ -1,6 +1,7 @@
 
 import logging
 import sys
+import os
 
 from rfa.kaltura2 import credentials
 
@@ -14,6 +15,7 @@ from KalturaClient.Plugins.Core import KalturaMediaEntry, KalturaMediaType
 from KalturaClient.Plugins.Core import KalturaUiConf, KalturaUiConfObjType, KalturaUiConfFilter
 from KalturaClient.Plugins.Core import KalturaMediaEntryFilter, KalturaMediaEntryFilterForPlaylist
 from KalturaClient.Plugins.Core import KalturaMediaEntryOrderBy
+from KalturaClient.Plugins.Core import KalturaCategoryEntryFilter
 from KalturaClient.Plugins.Core import KalturaCategoryFilter
 from KalturaClient.Plugins.Core import KalturaCategoryEntry
 from KalturaClient.Plugins.Core import KalturaSearchOperator
@@ -71,7 +73,7 @@ def kconnect(partner_id=None):
 
 
 #@cache me?
-def kGetVideoPlayers():
+def GetVideoPlayers():
     (client, session) = kconnect()
 
     filt = KalturaUiConfFilter()
@@ -90,7 +92,7 @@ def kGetVideoPlayers():
 
 
 #@cache me?
-def kGetPlaylistPlayers():
+def GetPlaylistPlayers():
     (client, session) = kconnect()
     
     filt = KalturaUiConfFilter()
@@ -199,7 +201,7 @@ def getRelated(kvideoObj, limit=10, partner_id=None, filt=None):
     tags = kvideoObj.getTags().split()
     return getTagVids(tags, limit, partner_id, filt)
 
-def kcreateEmptyFilterForPlaylist():
+def createEmptyFilterForPlaylist():
     """Create a Playlist Filter, filled in with default, required values"""
     #These were mined by reverse-engineering a playlist created on the KMC and inspecting the object
     kfilter = KalturaMediaEntryFilterForPlaylist()
@@ -212,7 +214,7 @@ def kcreateEmptyFilterForPlaylist():
     
     return kfilter   
 
-def kcreatePlaylist(context):
+def createPlaylist(context):
     """Create an empty playlist on the kaltura server"""
     
     kplaylist = KalturaPlaylist()
@@ -240,7 +242,7 @@ def kcreatePlaylist(context):
     
     return kplaylist
 
-def kcreateVideo(context):
+def createVideo(context):
     """given a plone content-type of kalturavideo,
        create a Kaltura MediaEntry object.
        The mediaEntry ReferenceId is set to the UID of the plone object 
@@ -260,7 +262,7 @@ def kcreateVideo(context):
     
     return mediaEntry
     
-def uploadVideo(context):
+def uploadVideo(context, client=None):
     """Provide the KalturaVideo with a NamedFile field.
        This uploads the video to Kaltura and returns the upload token.
         """
@@ -268,38 +270,38 @@ def uploadVideo(context):
     
     #get the file field and....
     
-    #maybe it's 'get_data'?
-    if not hasattr(context, 'get_data'):
-        print("nothing to upload to kaltura from object %s" % (str(FileObject),))
-        return 1;
+    field = context.video_file
+    if field.filename is None:
+        return 1 #there is no file.
     
     #XXX Configure Temporary Directory and name better
-    #XXX Turn into a file stream from context.get_data to avoid write to file...        
-    tempfh = open('/tmp/tempfile', 'wr')
-    tempfh.write(context.get_data())
+    #XXX Turn into a file stream from context.get_data to avoid write to file...
+    #XXX Try to make this a thread and signal back to context when upload complete
+    tempfh = open('/tmp/tempfile', 'wb')
+    tempfh.write(field.data)
     tempfh.close()    
     
-    #XXX Not A good idea if we plan on not using the ZODB
-    name = context.Title()
+    name = context.title
     ProviderId = context.UID()  
      
-    (client, session) = kconnect()
+    if client is None:
+        (client, session) = kconnect()
     
-    uploadTokenId = client.media.upload(file('/tmp/tempfile', 'rb'))  
+    uploadTokenId = client.media.upload(open('/tmp/tempfile', 'rb'))  
     
     os.remove('/tmp/tempfile')
   
     KalturaLoggerInstance.log("video uploaded to kaltura: uploadTokenId %s" % (uploadTokenId,))
     return uploadTokenId
     
-def kremoveVideo(context):
+def removeVideo(context):
     (client, session) = kconnect()
     try:
         client.media.delete(context.KalturaObject.getId())
     except: #XXX ENTRY_ID_NOT_FOUND exception, specifically
         pass
     
-def krejectVideo(context):
+def rejectVideo(context):
     (client, session) = kconnect()
     try:
         client.media.reject(context.KalturaObject.getId())
@@ -307,7 +309,7 @@ def krejectVideo(context):
         pass
     
 #XXX cacheme for a few mins
-def kGetCategories(parent=None):
+def GetCategories(parent=None):
     (client, session) = kconnect()
     
     if parent is not None:
@@ -319,9 +321,9 @@ def kGetCategories(parent=None):
     result = client.category.list(filter=filt).objects
     return result
 
-def kGetCategoryId(categoryName):
+def GetCategoryId(categoryName):
     """ provide a categoryName (string) and this will return it's Id on the kaltura server"""
-    categoryObjs = kGetCategories()
+    categoryObjs = GetCategories()
     for cat in categoryObjs:
         if cat.getName() == categoryName:
             return cat.getId()
@@ -375,7 +377,7 @@ def kdiff(ploneObj, kalturaObj):
     return retval
 
 
-def kSetStatus(context, status, client=None):
+def setModerationStatus(context, status, client=None):
     """given a kaltura video object, set the status on the media entry
        and update the server
        PENDING_MODERATION = 1
@@ -389,7 +391,7 @@ def kSetStatus(context, status, client=None):
         client, ks = kconnect()
     
     if status in (2,):
-        updateEntry = client.media.approve(context.entryId)
+        updateEntry = client.media.approve(context.KalturaObject.getId())
     elif status in (3,1,5):
         updateEntry = client.media.reject(context.entryId)
         
@@ -431,7 +433,7 @@ def syncCategories(context, client=None, categories=None):
         newCatEntry.setEntryId(context.KalturaObject.getId())
         try:
             client.categoryEntry.add(newCatEntry)
-        except KalturaException, e:
+        except KalturaException as e:
             if e.code == "CATEGORY_ENTRY_ALREADY_EXISTS":
                 pass #should never happen, tho
     

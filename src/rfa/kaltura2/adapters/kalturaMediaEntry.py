@@ -1,5 +1,5 @@
-from zope.interface import implementor, provides
 from zope.interface import Interface
+from zope.interface import implementer
 from zope.interface import directlyProvides
 
 from KalturaClient.Plugins.Core import KalturaMediaEntry
@@ -18,27 +18,8 @@ class IKalturaMediaEntryProvider(Interface):
 
 
 
-@implementor(IKalturaMediaEntryProvider)
-class Kaltura_VideoMediaEntryProvider(object):
-    
-    fieldmap = ({'name': 'Title',
-             'pgetter': 'Title',
-             'psetter': 'setTitle',
-             'kgetter': 'getName',
-             'ksetter': 'setName'},
-            {'name': 'Description',
-             'pgetter':'Description',
-             'psetter': 'setDescription',
-             'kgetter': 'getDescription',
-             'ksetter': 'setDescription'},
-            {'name': 'tags',
-             'pgetter': 'getKalturaTags',
-             'psetter': 'setKalturaTags',
-             'kgetter': 'getTags',
-             'ksetter': 'setTags'},
-            #note that categories are not a property of a kalturaObject
-            #see self.updateCategories method
-            )    
+@implementer(IKalturaMediaEntryProvider)
+class Kaltura_VideoMediaEntryProvider(object): 
     
     def __init__(self, context):
         
