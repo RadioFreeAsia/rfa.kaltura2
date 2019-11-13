@@ -442,6 +442,8 @@ def syncCategories(context, client=None, categories=None):
         client.categoryEntry.delete(context.KalturaObject.getId(), catId)
         
     #sync the categories to plone object
-    context.categories = client.categoryEntry.list(filt).objects
+    kCategoryEntries = client.categoryEntry.list(filt).objects
+    remoteCategories = [str(obj.categoryId) for obj in kCategoryEntries]
+    context.categories = remoteCategories
     
     
