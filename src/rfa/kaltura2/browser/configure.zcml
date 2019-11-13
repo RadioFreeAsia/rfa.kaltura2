@@ -4,6 +4,21 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="rfa.kaltura2">
 
+  
+
+  <browser:page
+     name="view"
+     for="rfa.kaltura2.kaltura_video.IKaltura_Video"
+     template="templates/kalturavideo.pt"
+     permission="zope2.View"
+   />
+
+  <browser:page
+     name="KalturaVideoMacros"
+     for="rfa.kaltura2.kaltura_video.IKaltura_Video"
+     template="templates/KalturaVideoMacros.pt"
+     permission="zope2.View"
+   />
   <!-- Set overrides folder for Just-a-Bunch-Of-Templates product -->
   <include package="z3c.jbot" file="meta.zcml" />
   <browser:jbot

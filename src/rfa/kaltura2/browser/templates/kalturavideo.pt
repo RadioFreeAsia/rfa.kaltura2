@@ -1,29 +1,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone"
       >
-
-  <head>
-    <title tal:content="context/Title"></title>
-  </head>
-  <body class="KalturaVideoPage">
-    <div tal:define="width nothing;
-                     height nothing;
-                     url context/playbackUrl;">
-                     
-      <h1 tal:content="context/Title">Title</h1>
-      <p class="description" tal:content="context/Description"> description </p>
-        
-
-      <hr>
-      <div>
-        <h2> Test Dynamic Embed Macro </h2>
-        <metal:video metal:use-macro="context/KalturaVideoMacros/macros/dynamicEmbed">
-          Dynamic Embedding Example
-        </metal:video>
-      </div>
-
-    </div> <!-- videopage container div -->
-  </body>
-   
+  
+  <metal:fill metal:fill-slot="content-core">
+  <style>.kWidgetIframeContainer { height: 520px; } </style>    
+   <metal:video metal:use-macro="context/KalturaVideoMacros/macros/dynamicEmbed">
+   </metal:video>
+  </metal:fill>
 </html>
