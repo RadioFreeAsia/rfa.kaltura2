@@ -11,6 +11,7 @@
      for="rfa.kaltura2.kaltura_video.IKaltura_Video"
      template="templates/kalturavideo.pt"
      permission="zope2.View"
+     class="rfa.kaltura2.browser.videoview.KalturaVideoView"
    />
 
   <browser:page
