@@ -34,7 +34,9 @@ class Kaltura_VideoMediaEntryProvider(object):
         #set Description
         self.mediaEntry.setDescription(context.description)
         #Set Tags
-        self.mediaEntry.setTags(context.tags)
+        #make a comma delimited string, and pass that in.
+        tags = ','.join([t for t in context.tags if t])
+        self.mediaEntry.setTags(tags)
         
         #Don't set categories - those are handled separately.    
             
