@@ -2,6 +2,7 @@
 import logging
 import sys
 import os
+from copy import copy
 
 from rfa.kaltura2 import credentials
 
@@ -133,7 +134,7 @@ def getRecent(limit=10, partner_id=None, filt=None):
        provide 'filt' parameter of an existing KalturaMediaEntryFilter to filter results
     """
     if filt is not None:
-        kfilter = copy.copy(filt)
+        kfilter = copy(filt)
     else:
         kfilter = KalturaMediaEntryFilter()
     kfilter.setOrderBy(KalturaMediaEntryOrderBy.CREATED_AT_DESC)
@@ -146,7 +147,7 @@ def getMostViewed(limit=10, partner_id=None, filt=None):
        provide 'filt' parameter of an existing KalturaMediaEntryFilter to filter results
     """
     if filt is not None:
-        kfilter = copy.copy(filt)
+        kfilter = copy(filt)
     else:
         kfilter = KalturaMediaEntryFilter()
     kfilter.setOrderBy(KalturaMediaEntryOrderBy.VIEWS_DESC)
@@ -163,7 +164,7 @@ def getTagVids(tags, limit=10, partner_id=None, filt=None):
         raise TypeError("tags must be a non-string iterable")
     
     if filt is not None:
-        kfilter = copy.copy(filt)
+        kfilter = copy(filt)
     else:
         kfilter = KalturaMediaEntryFilter()    
 
@@ -185,7 +186,7 @@ def getCategoryVids(catId, limit=10, partner_id=None, filt=None):
         provide 'filt' parameter of an existing KalturaMediaEntryFilter to filter results
     """
     if filt is not None:
-        kfilter = copy.copy(filt)
+        kfilter = copy(filt)
     else:
         kfilter = KalturaMediaEntryFilter()
     kfilter.setOrderBy(KalturaMediaEntryOrderBy.CREATED_AT_DESC)
@@ -292,6 +293,10 @@ def uploadVideo(context, client=None):
     os.remove('/tmp/tempfile')
   
     KalturaLoggerInstance.log("video uploaded to kaltura: uploadTokenId %s" % (uploadTokenId,))
+    
+    #remove local blob if configured to do so.
+    
+    
     return uploadTokenId
     
 def removeVideo(context):
