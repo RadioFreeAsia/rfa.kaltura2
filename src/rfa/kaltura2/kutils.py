@@ -1,10 +1,11 @@
-
+import tempfile
 import logging
 import sys
 import os
 from copy import copy
 
-from rfa.kaltura2 import credentials
+from zope.component import getUtility
+from plone.registry.interfaces import IRegistry
 
 from KalturaClient import *
 from KalturaClient.Base import IKalturaLogger
@@ -22,6 +23,9 @@ from KalturaClient.Plugins.Core import KalturaCategoryEntry
 from KalturaClient.Plugins.Core import KalturaSearchOperator
 from KalturaClient.Plugins.Core import KalturaUploadToken, KalturaUploadedFileTokenResource
 from KalturaClient.Plugins.Core import KalturaEntryModerationStatus
+
+from rfa.kaltura2 import credentials
+from rfa.kaltura2.controlpanel import IRfaKalturaSettings
 
 logger = logging.getLogger("rfa.kaltura")
 logger.setLevel(logging.WARN)
@@ -276,11 +280,21 @@ def uploadVideo(context, client=None):
         return 1 #there is no file.
     
     #XXX Configure Temporary Directory and name better
-    #XXX Turn into a file stream from context.get_data to avoid write to file...
+    
     #XXX Try to make this a thread and signal back to context when upload complete
+    
+    #XXX Turn into a file stream from context.get_data to avoid write to file...
+    #When we try to use temporary file, kaltura throws an exception
+    # *** KalturaClient.exceptions.KalturaClientException: expected string or bytes-like object (-4)
+    #tempfh = tempfile.TemporaryFile(mode="w+b")
+    #tempfh.write(field.data)
+    #tempfh.seek(0)
+    
+    #So, we go through this inefficient little jig until we figure out a better way
     tempfh = open('/tmp/tempfile', 'wb')
     tempfh.write(field.data)
-    tempfh.close()    
+    tempfh.close()  #reopen?
+    tempfh = open('/tmp/tempfile', 'rb')    
     
     name = context.title
     ProviderId = context.UID()  
@@ -288,15 +302,21 @@ def uploadVideo(context, client=None):
     if client is None:
         (client, session) = kconnect()
     
-    uploadTokenId = client.media.upload(open('/tmp/tempfile', 'rb'))  
+    uploadTokenId = client.media.upload(tempfh)  
     
+    #unnecessary if we use TemporaryFile
+    tempfh.close()
     os.remove('/tmp/tempfile')
   
     KalturaLoggerInstance.log("video uploaded to kaltura: uploadTokenId %s" % (uploadTokenId,))
     
     #remove local blob if configured to do so.
-    
-    
+    #if "no local storage" is set, we clobber the blob file.
+    registry = getUtility(IRegistry)
+    settings = registry.forInterface(IRfaKalturaSettings)
+    if settings.storageMethod == u"No Local Storage":    
+        field.data = name+"\n\nThis file is stored on kaltura only, and is not available via plone"
+
     return uploadTokenId
     
 def removeVideo(context):
