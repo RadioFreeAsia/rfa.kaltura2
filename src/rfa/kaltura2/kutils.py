@@ -282,10 +282,15 @@ def uploadVideo(context, client=None):
     #XXX Configure Temporary Directory and name better
     
     #XXX Try to make this a thread and signal back to context when upload complete
-    
     #XXX Turn into a file stream from context.get_data to avoid write to file...
+    
     #When we try to use temporary file, kaltura throws an exception
+    #Module KalturaClient.Plugins.Core, line 64352, in upload
+    #    Module KalturaClient.Client, line 364, in doQueue
+    #    Module KalturaClient.Client, line 316, in doHttpRequest
+    #    Module KalturaClient.Client, line 298, in openRequestUrl
     # *** KalturaClient.exceptions.KalturaClientException: expected string or bytes-like object (-4)
+    # I think it's the filename property of the tempfile being an integer - but not enough analysis to be sure.
     #tempfh = tempfile.TemporaryFile(mode="w+b")
     #tempfh.write(field.data)
     #tempfh.seek(0)
