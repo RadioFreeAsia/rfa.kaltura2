@@ -302,13 +302,14 @@ def uploadVideo(context, client=None):
     if client is None:
         (client, session) = kconnect()
     
-    uploadTokenId = client.media.upload(tempfh)  
+    uploadToken = client.uploadToken.add()
+    client.uploadToken.upload(uploadToken.id, tempfh)
     
     #unnecessary if we use TemporaryFile
     tempfh.close()
     os.remove('/tmp/tempfile')
   
-    KalturaLoggerInstance.log("video uploaded to kaltura: uploadTokenId %s" % (uploadTokenId,))
+    KalturaLoggerInstance.log("video uploaded to kaltura: uploadToken.id %s" % (uploadToken.id,))
     
     #remove local blob if configured to do so.
     #if "no local storage" is set, we clobber the blob file.
@@ -317,7 +318,7 @@ def uploadVideo(context, client=None):
     if settings.storageMethod == u"No Local Storage":    
         field.data = name+"\n\nThis file is stored on kaltura only, and is not available via plone"
 
-    return uploadTokenId
+    return uploadToken.id
     
 def removeVideo(context):
     (client, session) = kconnect()
