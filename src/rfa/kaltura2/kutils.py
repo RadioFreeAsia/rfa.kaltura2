@@ -361,6 +361,16 @@ def GetCategoryId(categoryName):
         
     return None
 
+def GetCategoryName(categoryId):
+    """ provide a categoryId and this will return it's name on the kaltura server"""
+    categoryObjs = GetCategories()
+    categoryId = int(categoryId)
+    for cat in categoryObjs:
+        if cat.getId() == categoryId:
+            return cat.getName()
+        
+    return None
+
 def kdiff(ploneObj, kalturaObj):
     """do a property-to-property match between plone object and kaltura object
        and return property name tuples of fields that differ
