@@ -9,6 +9,7 @@ from plone.registry.interfaces import IRegistry
 from rfa.kaltura2.controlpanel import IRfaKalturaSettings
 from rfa.kaltura2.kutils import GetVideoPlayers
 from rfa.kaltura2.kutils import GetCategories, GetCategoryId
+from KalturaClient.exceptions import KalturaException
  
 @provider(IContextSourceBinder)
 def getTagVocabulary():
@@ -43,7 +44,13 @@ class CategoryVocabularyFactory(object):
             if self.parent == 'All':
                 parentCategoryId = None #all categories
                 
-            categoryObjs = GetCategories(parentCategoryId)
+            try:    
+                categoryObjs = GetCategories(parentCategoryId)
+            except KalturaException:
+                #problem contacting kaltura.  Return an empty list and invalidate cache.
+                self.vocab = None
+                return []
+            
             for cat in categoryObjs:
                 #simple term takes value, token, title
                 items.append( SimpleTerm(str(cat.getId()), 
