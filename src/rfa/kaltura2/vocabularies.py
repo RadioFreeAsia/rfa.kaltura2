@@ -38,10 +38,10 @@ class CategoryVocabularyFactory(object):
                     #place the top-level category at the top of the list, so it's selectable.
                     items.append( SimpleTerm(str(parentCategoryId), str(parentCategoryId),tlc,) )
                 else:
-                    self.parentCateogyId = None #all categories
+                    parentCateogyId = None #all categories
             
             if self.parent == 'All':
-                self.parentCategoryId = None #all categories
+                parentCategoryId = None #all categories
                 
             categoryObjs = GetCategories(parentCategoryId)
             for cat in categoryObjs:
