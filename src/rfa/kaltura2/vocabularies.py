@@ -49,7 +49,7 @@ class CategoryVocabularyFactory(object):
             except KalturaException:
                 #problem contacting kaltura.  Return an empty list and invalidate cache.
                 self.vocab = None
-                return []
+                return SimpleVocabulary([])
             
             for cat in categoryObjs:
                 #simple term takes value, token, title
