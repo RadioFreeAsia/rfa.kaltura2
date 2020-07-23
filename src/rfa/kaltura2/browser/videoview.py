@@ -17,6 +17,9 @@ class KalturaVideoView(DefaultView):
         return self.context.player
     
     def entryId(self):
-        return self.context.KalturaObject.getId()
+        try:
+            return self.context.KalturaObject.getId()
+        except AttributeError: #No KalturaObject for some reason
+            return self.context.entryId
     
     
