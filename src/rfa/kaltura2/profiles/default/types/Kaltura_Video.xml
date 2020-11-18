@@ -21,20 +21,21 @@
     <element value="view" />
   </property>
   <property name="default_view_fallback">False</property>
-  
+
   <property name="add_permission">cmf.AddPortalContent</property>
-  
+
   <property name="klass">plone.dexterity.content.Item</property>
-  
+
   <property name="behaviors">
-    <element value="plone.app.content.interfaces.INameFromTitle"/>
+    <element value="plone.publication" />
+    <element value="plone.app.dexterity.behaviors.filename.INameFromFileName" />
   </property>
 
   <property name="schema">rfa.kaltura2.kaltura_video.IKaltura_Video</property>
   <property name="model_source"></property>
   <property name="model_file"></property>
-  
-  
+
+
   <!-- Action aliases; rarely changed -->
   <alias from="(Default)" to="(dynamic view)"/>
   <alias from="edit" to="@@edit"/>
