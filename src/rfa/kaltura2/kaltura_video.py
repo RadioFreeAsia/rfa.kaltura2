@@ -12,6 +12,7 @@ from rfa.kaltura2.interfaces import IKalturaMediaEntry
 from rfa.kaltura2.vocabularies import VideoPlayerVocabularyFactory
 from rfa.kaltura2.vocabularies import CategoryVocabularyFactory
 from rfa.kaltura2.vocabularies import getTagVocabulary
+from collective import dexteritytextindexer
 
 from rfa.kaltura2 import _
 
@@ -38,7 +39,7 @@ class IKaltura_Video(model.Schema):
         description=_("Select video category(ies) this video belongs in"),
         value_type=schema.Choice(source=CategoryVocabularyFactory(None))
     )
-
+    dexteritytextindexer.searchable('tags')
     tags = schema.Tuple(
         title=_('Tags'),
         description=_("keyword tag(s) associated with this video (one per line)"),
