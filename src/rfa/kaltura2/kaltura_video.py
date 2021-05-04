@@ -19,11 +19,13 @@ from rfa.kaltura2 import _
 
 class IKaltura_Video(model.Schema):
 
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_('Video Title'),
         description=_('Title of your video')
     )
 
+    dexteritytextindexer.searchable('description')
     description = schema.Text(
         title=_('Video summary'),
     )
