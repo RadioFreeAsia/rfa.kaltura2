@@ -2,21 +2,14 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:gs="http://namespaces.zope.org/genericsetup"
     i18n_domain="rfa.kaltura">
-   <gs:upgradeStep
-      source="1000"
-      destination="1001"
-      profile="rfa.kaltura2:default"
-      title="Upgrade to 1001"
-      description="rfa.kaltura2 upgrade step - add permissions and roles">
 
-      <gs:upgradeDepends
-         source="1000"
-         destination="1001"
-         profile="rfa.kaltura2:default"
-         title="Apply Rolemap"
-         import_steps="rolemap typeinfo"
-      />
-
-   </gs:upgradeStep>
-
+  <gs:upgradeDepends
+    source="1000"
+    destination="1001"
+    profile="rfa.kaltura2:default"
+    title="Apply Rolemap"
+    import_steps="rolemap typeinfo"
+    description="rfa.kaltura2 upgrade step - add permissions and roles"
+  />
+  
 </configure>
