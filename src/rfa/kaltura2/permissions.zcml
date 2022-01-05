@@ -4,8 +4,15 @@
   i18n_domain="plone">
 
   <configure zcml:condition="installed AccessControl.security">
-  <!-- -*- extra stuff goes here -*- -->
+     <permission
+        id="rfa.kaltura2.addKalturaVideo"
+        title="rfa.kaltura2: Add Kaltura Video"
+      />
 
+     <permission
+        id="rfa.kaltura2.addKalturaPlaylist"
+        title="rfa.kaltura2: Add Kaltura Playlist"
+      />
 
   </configure>
 

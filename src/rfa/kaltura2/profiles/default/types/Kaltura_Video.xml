@@ -22,7 +22,7 @@
   </property>
   <property name="default_view_fallback">False</property>
 
-  <property name="add_permission">cmf.AddPortalContent</property>
+  <property name="add_permission">rfa.kaltura2.addKalturaVideo</property>
 
   <property name="klass">plone.dexterity.content.Item</property>
 

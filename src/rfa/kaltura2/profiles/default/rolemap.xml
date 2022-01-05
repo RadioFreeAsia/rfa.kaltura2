@@ -1,7 +1,18 @@
 <?xml version="1.0"?>
 <rolemap>
   <permissions>
-  <!-- -*- extra stuff goes here -*- -->
+
+    <permission name="rfa.kaltura2: Add Kaltura Video" acquire="True">
+      <role name="Contributor"/>
+      <role name="Manager"/>
+      <role name="Owner"/>
+    </permission>
+
+    <permission name="rfa.kaltura2: Add Kaltura Playlist" acquire="True">
+      <role name="Contributor"/>
+      <role name="Manager"/>
+      <role name="Owner"/>
+    </permission>
 
   </permissions>
 </rolemap>
