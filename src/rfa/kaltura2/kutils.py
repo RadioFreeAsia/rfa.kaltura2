@@ -431,10 +431,15 @@ def setModerationStatus(context, status, client=None):
     if client is None:
         client, ks = kconnect()
     
+    vid_object = getattr(context, 'KalturaObject', None)
+    if vid_object:
+        vid_id = vid_object.getId()
+    else:
+        vid_id = context.entryId
     if status in (2,):
-        updateEntry = client.media.approve(context.KalturaObject.getId())
+        updateEntry = client.media.approve(vid_id)
     elif status in (3,1,5):
-        updateEntry = client.media.reject(context.KalturaObject.getId())
+        updateEntry = client.media.reject(vid_id)
         
     #TODO: create moderationFlag object and flag entry.
     
