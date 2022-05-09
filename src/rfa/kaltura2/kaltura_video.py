@@ -68,6 +68,14 @@ class IKaltura_Video(model.Schema):
         default=None
     )
 
+    custom_thumbnail = NamedBlobFile(
+        title=_('Custom thumbnail'),
+        description=u"Upload custom thumbnail (optional)",
+        required=False,
+
+    )
+    model.primary('custom_thumbnail')
+
     #This stores the python object representing the entry in the Kaltura Media Center
     KalturaObject = schema.Object(IKalturaMediaEntry)
 
