@@ -57,7 +57,8 @@ def modifyVideo(context, event):
         for d in event.descriptions:
             if d.interface is IKaltura_Video and 'video_file' in d.attributes:
                 file_changed = True
-
+            if d.interface is IKaltura_Video and 'custom_thumbnail' in d.attributes:
+                thumbnail_changed = True
     (client, session) = kconnect()
 
     mediaEntry = client.media.update(entryId, newMediaEntry)
@@ -86,10 +87,6 @@ def modifyVideo(context, event):
                 logger.log('Kaltura Video not replaced on KMC for %s, entry id %s' %(context.getId(), entryId),
                            level=logging.WARN)
 
-    if hasattr(event, 'descriptions') and event.descriptions:
-        for d in event.descriptions:
-            if d.interface is IKaltura_Video and 'custom_thumbnail' in d.attributes:
-                thumbnail_changed = True
     if thumbnail_changed:
         modify_thumbnail(context, event, entryId)
 
@@ -150,6 +147,16 @@ def workflowChange(context, event):
 
     if action == 'publish':
         status = KalturaEntryModerationStatus.APPROVED
+        effective_date = context.effective_date
+        if effective_date:
+            python_date = effective_date.asdatetime()
+            epoch_date = python_date.timestamp()
+            mediaEntry = getattr(context, 'KalturaObject', None)
+            if mediaEntry is not None:
+                mediaEntry.setStartDate(epoch_date)
+                newMediaEntry = IKalturaMediaEntryProvider(context).getEntry()
+                (client, session) = kconnect()
+                mediaEntry = client.media.update(mediaEntry.id, newMediaEntry)
     elif action in ('retract', 'reject'):
         status = KalturaEntryModerationStatus.PENDING_MODERATION
 

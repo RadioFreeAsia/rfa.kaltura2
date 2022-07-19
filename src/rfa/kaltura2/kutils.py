@@ -23,6 +23,7 @@ from KalturaClient.Plugins.Core import KalturaCategoryEntry
 from KalturaClient.Plugins.Core import KalturaSearchOperator
 from KalturaClient.Plugins.Core import KalturaUploadToken, KalturaUploadedFileTokenResource
 from KalturaClient.Plugins.Core import KalturaEntryModerationStatus
+import time
 
 from rfa.kaltura2 import credentials
 from rfa.kaltura2.controlpanel import IRfaKalturaSettings
@@ -129,7 +130,8 @@ def makeFilter(catIds=None, tagIds=None, order=None):
         if isinstance(catIds, list) or isinstance(catIds, tuple):
             catIds = ','.join(catIds)
         kfilter.setCategoryAncestorIdIn(catIds)
-
+    now_epoch_time = time.time()
+    kfilter.setStartDateLessThanOrEqualOrNull(now_epoch_time)
     return kfilter
     #if tagIds is not None....
 
