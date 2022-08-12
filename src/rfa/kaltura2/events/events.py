@@ -96,34 +96,29 @@ def modify_thumbnail(context, event, enteryId):
 
     (client, session) = kconnect()
     thumb_assets = client.thumbAsset.getByEntryId(enteryId)
+    thumb_id = None
     default_thumb_id = None
-    #get default_thumb and delete it after making new upload default
+    #get default_thumb and other thumb
     for i in thumb_assets:
         if i.getTags() == 'default_thumb':
             default_thumb_id = i.getId()
+
+        if i.getTags() != 'default_thumb':
+            thumb_id = i.getId()
 
     if context.custom_thumbnail:
 
         new_thumbnail = uploadThumbnail(context, client)
         asset_id = new_thumbnail.id
-        #make new upload default and delete previous default
+        #make new upload default
         client.thumbAsset.setAsDefault(asset_id)
-        if default_thumb_id:
-            client.thumbAsset.delete(default_thumb_id)
-    #if request is to remove, then generate a thumb from video and make it default and remove previous default
-    else:
-        thumb_params = KalturaThumbParams()
-        thumb_params.cropType = KalturaThumbCropType.CROP
-        thumb_params.format = KalturaContainerFormat.JPG
-        thumb_params.videoOffset = 15
-        source_asset_id = ""
-        result = client.thumbAsset.generate(enteryId, thumb_params, source_asset_id)
-        client.thumbAsset.setAsDefault(result.getId())
 
-        thumb_assets = client.thumbAsset.getByEntryId(enteryId)
+    #if request is to remove,
+    else:
         for i in thumb_assets:
-            if i.getTags() != 'default_thumb':
-                client.thumbAsset.delete(i.getId())
+            if i.getTags() == 'default_thumb':
+                if thumb_id:
+                    client.thumbAsset.setAsDefault(thumb_id)
 
 def deleteVideo(context, event):
     ##TODO - configure option to delete or reject plone deleted content.
