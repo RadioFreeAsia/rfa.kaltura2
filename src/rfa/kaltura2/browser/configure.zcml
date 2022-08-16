@@ -4,7 +4,7 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="rfa.kaltura2">
 
-  
+
 
   <browser:page
      name="view"
@@ -40,7 +40,7 @@
           plone.dexterity.interfaces.IDexterityFTI"
       provides="zope.publisher.interfaces.browser.IBrowserPage"
       factory=".addForm.AddView"
-      name="Kaltura Video AddForm"
+      name="Kaltura Video"
       />
     <class class=".addForm.AddView">
       <require

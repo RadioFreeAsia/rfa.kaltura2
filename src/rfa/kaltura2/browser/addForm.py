@@ -4,14 +4,13 @@ from Products.CMFPlone.resources import add_resource_on_request
 
 class AddForm(add.DefaultAddForm):
     portal_type = 'Kaltura Video'
-    
+
     def update(self):
         return super(AddForm, self).update()
 
 class AddView(add.DefaultAddView):
     form = AddForm
-    
+
     def __call__(self):
-        import pdb; pdb.set_trace()
-        add_resource_on_request(self.request, 'indexJS')
+        add_resource_on_request(self.request, 'fileUploaderJS')
         return super(AddView, self).__call__()
