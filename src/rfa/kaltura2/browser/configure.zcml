@@ -34,4 +34,19 @@
       directory="static"
       />
 
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+          zope.publisher.interfaces.browser.IDefaultBrowserLayer
+          plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".addForm.AddView"
+      name="Kaltura Video AddForm"
+      />
+    <class class=".addForm.AddView">
+      <require
+          permission="cmf.AddPortalContent"
+          interface="zope.publisher.interfaces.browser.IBrowserPage"
+          />
+    </class>
+
 </configure>

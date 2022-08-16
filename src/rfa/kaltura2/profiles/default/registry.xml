@@ -6,6 +6,11 @@
     <records interface="rfa.kaltura2.controlpanel.IRfaKalturaSettings">
     </records>
 
+     <records prefix="plone.resources/indexJS"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+       <value key="js">++plone++rfa.kaltura2/index.js</value>
+    </records>
+
    <!--  Bundle defined, but not used.
     <records prefix="plone.bundles/rfa.kaltura"
              interface='Products.CMFPlone.interfaces.IBundleRegistry'>
