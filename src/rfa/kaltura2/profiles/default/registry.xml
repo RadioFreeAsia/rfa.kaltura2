@@ -6,9 +6,9 @@
     <records interface="rfa.kaltura2.controlpanel.IRfaKalturaSettings">
     </records>
 
-     <records prefix="plone.resources/fileUploaderJS"
+     <records prefix="plone.resources/kulturaFileUploaderJS"
             interface='Products.CMFPlone.interfaces.IResourceRegistry'>
-       <value key="js">++plone++rfa.kaltura2/fileUploader.js</value>
+       <value key="js">++plone++rfa.kaltura2/kulturaFileUploader.js</value>
     </records>
 
    <!--  Bundle defined, but not used.
