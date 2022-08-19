@@ -12,5 +12,5 @@ class AddView(add.DefaultAddView):
     form = AddForm
 
     def __call__(self):
-        add_resource_on_request(self.request, 'kulturaFileUploaderJS')
+        add_resource_on_request(self.request, 'kalturaFileUploader')
         return super(AddView, self).__call__()
