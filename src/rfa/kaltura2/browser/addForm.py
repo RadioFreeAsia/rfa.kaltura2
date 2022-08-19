@@ -12,8 +12,8 @@ class AddView(add.DefaultAddView):
     form = AddForm
 
     def __call__(self):
-
-        add_resource_on_request(self.request, 'kalturaFileUploader')
         add_resource_on_request(self.request, 'filepond')
-        add_resource_on_request(self.request, 'filepondesm')
+        # add_resource_on_request(self.request, 'filepondesm')
+        add_resource_on_request(self.request, 'kalturaFileUploader')
+
         return super(AddView, self).__call__()

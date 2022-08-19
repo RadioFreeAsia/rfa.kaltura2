@@ -1,16 +1,21 @@
-alert('🥊upd123🥊');
+window.addEventListener('DOMContentLoaded', (event) => {
+    const inputElement = document.getElementById('form-widgets-video_file-input');
+    console.log(FilePond);
 
-// const URL = 'https://ptsv2.com/t/zgxvv-1660778859/post';
+
+    console.log(inputElement);
+});
 
 function cleanupStyle() {
     const el = document.querySelector('.filepond--credits');
     el.style.display = 'none';
 }
 
-const inputElement = document.getElementById('form-widgets-video_file-input');
 
-console.log(inputElement);
-// console.log(FilePond);
+console.log('123123 123');
+// console.log(inputElement);
+
+
 
 // FilePond.registerPlugin(FilePondPluginFileValidateSize);
 // FilePond.registerPlugin(FilePondPluginFileValidateType);
