@@ -4,27 +4,29 @@
    <records interface="rfa.kaltura2.controlpanel.IRfaKalturaSettings">
    </records>
 
-   <records prefix="plone.resources/kalturaFileUploader" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
-      <value key="url">++plone++rfa.kaltura2/js</value>
-      <value key="url">++plone++rfa.kaltura2/css</value>
-      <value key="js">++plone++rfa.kaltura2/js/filepond.min.js</value>
-      <value key="js">++plone++rfa.kaltura2/js/filepond.esm.min.js</value>
+    <records prefix="plone.resources/kalturaFileUploader" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
       <value key="js">++plone++rfa.kaltura2/js/kalturaFileUploader.js</value>
-      <!-- <value key="merge_with">default</value> -->
-      <!-- <value key="load_async">False</value> -->
-      <!-- <value key="load_defer">True</value> -->
-
       <value key="css">
          <element>++plone++rfa.kaltura2/css/filepond.min.css</element>
       </value>
    </records>
 
+
+    <records prefix="plone.resources/filepond" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++plone++rfa.kaltura2/js/filepond.min.js</value>
+   </records>
+
+    <records prefix="plone.resources/filepondesm" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++plone++rfa.kaltura2/js/filepond.esm.min.js</value>
+   </records>
+
+
    <!-- <records prefix="plone.resources/a_kulturaFileUploader" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
        <value key="js">++plone++rfa.kaltura2/filepond.min.js</value>
        <value key="js">++plone++rfa.kaltura2/filepond.esm.min.js</value>
        <value key="js">++plone++rfa.kaltura2/kulturaFileUploader.js</value>
-       
-       
+
+
        <value key="js">
          <element>++plone++rfa.kaltura2/kulturaFileUploader.js</element>
          <element>++plone++rfa.kaltura2/filepond.min.js</element>
