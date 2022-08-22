@@ -12,6 +12,8 @@ from rfa.kaltura2.interfaces import IKalturaMediaEntry
 from rfa.kaltura2.vocabularies import VideoPlayerVocabularyFactory
 from rfa.kaltura2.vocabularies import CategoryVocabularyFactory
 from rfa.kaltura2.vocabularies import getTagVocabulary
+from rfa.kaltura2.widget import FileUploadWidget
+
 from collective import dexteritytextindexer
 
 from rfa.kaltura2 import _
@@ -59,6 +61,12 @@ class IKaltura_Video(model.Schema):
         title=_('video file'),
     )
     model.primary('video_file')
+
+    directives.widget(
+        'video_file',
+        FileUploadWidget,
+    )
+
     ##Hidden Fields
     #User never interacts with these fields
     directives.omitted('entryId', 'KalturaObject')

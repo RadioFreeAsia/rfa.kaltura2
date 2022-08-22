@@ -1,0 +1,4 @@
+<html>
+  <span> Hello custom widget </span>
+  <script src="++plone++rfa.kaltura2/js/filepond.js"></script>
+</html>
