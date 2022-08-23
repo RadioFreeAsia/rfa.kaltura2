@@ -1,0 +1,13 @@
+  <configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="rfa.kaltura2">
+
+    <browser:page
+      name="getKs"
+      for="*"
+      permission="rfa.kaltura2.addKalturaVideo"
+      class="rfa.kaltura2.api.getKs"
+    />
+
+  </configure>

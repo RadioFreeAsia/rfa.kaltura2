@@ -9,12 +9,16 @@
 
   <i18n:registerTranslations directory="locales" />
 
+  <include file="permissions.zcml" />
+  <include file="upgrades.zcml" />
+
   <include package=".browser" />
   <include package=".events" />
   <include package=".adapters" />
+  <include package=".api" />
 
-  <include file="permissions.zcml" />
-  <include file="upgrades.zcml" />
+
+
 
   <z3c:widgetTemplate
       mode="input"
