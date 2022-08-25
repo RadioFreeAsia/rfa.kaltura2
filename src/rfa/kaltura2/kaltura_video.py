@@ -57,10 +57,11 @@ class IKaltura_Video(model.Schema):
         vocabulary='plone.app.vocabularies.Keywords'
     )
 
-    video_file = NamedBlobFile(
+    #let's put the upload token id in here.
+    video_file = schema.Text(
         title=_('video file'),
+        required=True,
     )
-    model.primary('video_file')
 
     directives.widget(
         'video_file',
