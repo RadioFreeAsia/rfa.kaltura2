@@ -18,7 +18,6 @@
         // Register as an anonymous AMD module:
         define([
             'jquery',
-            // 'RFA/english/++plone++rfa.kaltura2/js/jquery.ui.widget.js'
         ], factory);
     } else {
         // Browser globals:

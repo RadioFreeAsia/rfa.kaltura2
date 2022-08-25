@@ -8,7 +8,7 @@ function appendStyle(url) {
     document.head.appendChild(link);
 }
 
-async function setKsToken() {
+async function getKsToken() {
     const responce = await fetch('./getKs');
     const data = await responce.json();
     KALTURA_SESSION_TOKEN = data.ks;
@@ -18,7 +18,7 @@ appendStyle('++plone++rfa.kaltura2/css/jquery.fileupload-ui.css');
 appendStyle('++plone++rfa.kaltura2/css/jquery.fileupload-ui-kaltura.css');
 appendStyle('++plone++rfa.kaltura2/css/style.css');
 
-setKsToken();
+getKsToken();
 
 require([
     "++plone++rfa.kaltura2/js/jquery.ui.widget.js",
@@ -45,7 +45,6 @@ require([
     const categoryId = -1;
 
     widget = $('#uploadHook').fileupload({
-        // continue to pass this, even not used, to trigger chunk upload
         maxChunkSize: 3000000,
         dynamicChunkSizeInitialChunkSize: 1000000,
         dynamicChunkSizeThreshold: 50000000,
@@ -56,10 +55,9 @@ require([
         ks: KALTURA_SESSION_TOKEN,
         fileTypes: `*.mts;*.MTS;*.qt;*.mov;*.mpg;*.avi;*.mp3;*.m4a;*.wav;*.mp4;
         *.wma;*.vob;*.flv;*.f4v;*.asf;*.qt;*.mov;*.mpeg;*.avi;*.wmv;*.m4v;*.3gp;
-        *.jpg;*.jpeg;*.bmp;*.png;*.gif;*.tif;*.tiff;*.mkv;*.QT;*.MOV;*.MPG;*.AVI;
-        *.MP3;*.M4A;*.WAV;*.MP4;*.WMA;*.VOB;*.FLV;*.F4V;*.ASF;*.QT;*.MOV;*.MPEG;
-        *.AVI;*.WMV;*.M4V;*.3GP;*.JPG;*.JPEG;*.BMP;*.PNG;*.GIF;*.TIF;*.TIFF;*.MKV;
-        *.AIFF;*.arf;*.ARF;*.webm;*.WEBM;*.rm;*.RM;*.ra;*.RA;*.RV;*.rv;*.aiff`,
+        *.mkv;*.QT;*.MOV;*.MPG;*.AVI;*.M4A;*.WAV;*.MP4;*.WMA;*.VOB;*.FLV;*.F4V;*.ASF;*.QT;*.MOV;*.MPEG;
+        *.AVI;*.WMV;*.M4V;*.3GP;*.MKV;*.webm;*.WEBM;
+        *.AIFF;*.arf;*.ARF;*.rm;*.RM;*.ra;*.RA;*.RV;*.rv;*.aiff`,
         context: '',
         categoryId: categoryId,
         messages: {
@@ -87,6 +85,7 @@ require([
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const file = data.files[0];
             const uploadManager = widget.fileupload("getUploadManager");
+            $('#fileupload-btn').attr('disabled', '');
 
             if (file.error === undefined) {
                 const context = widget.fileupload('option', 'context');
@@ -94,7 +93,7 @@ require([
                 console.log('now uploading file name: ' + encodeURIComponent(file.name));
                 //here we should display an edit entry form to allow the user to add/save metadata to the entry
                 $("#uploadbox" + uploadBoxId + " .entry_details").removeClass('hidden');
-                
+
             } else {
                 console.log('some kind of error when starting to upload ' + file.error);
             }
@@ -104,6 +103,11 @@ require([
             console.log('fileuploaddone');
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const file = data.files[0];
+
+            $('#upload-file-info').addClass('hidden');
+
+            $('#kaltura-upload-token-id').val(data.uploadTokenId);
+
             console.log('upload complete success: ' + encodeURIComponent(file.name) + '/token/' + data.uploadTokenId + '/boxId/' + uploadBoxId);
             console.log('Next, call the media.add and media.addContent API actions to create your Kaltura Media Entry and associate it with this newly uploaded file. Once media.addContent is called, the transcoding process will begin and your media entry will be prepared for playback and sharing. Use the Kaltura JS client library or call your backend service to execute media.add and media.addContent passing the uploadTokenId.');
         })
@@ -134,5 +138,6 @@ require([
             uploadBoxId: 1
         });
         console.log('file chosen');
+        $('#fileupload-btn').attr('disabled', '');
     });
 });

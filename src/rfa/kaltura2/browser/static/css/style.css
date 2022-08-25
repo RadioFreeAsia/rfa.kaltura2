@@ -1,6 +1,24 @@
+label[for='form-widgets-video_file'] {
+    text-transform: capitalize;
+}
+
+#fileupload-btn {
+    background-color: #2385c4;
+    border-color: #1b6899;
+    color: #fff;
+    border-radius: 4px;
+}
+
+#fileupload-btn:hover {
+    background-color: #1b6899;
+    border-color: #124465;
+    color: #fff;
+}
+
 .cancelBtn {
     background-color: #d9534f;
     color: #fff;
+    border-radius: 4px;
 }
 
 .cancelBtn:hover {

@@ -6,7 +6,7 @@
         <form id='fileupload'>
           <button id='fileupload-btn' class="fileinput-button">
           Choose a file to upload   		
-            <input id="fileinput" class="fileinput" data-uploadboxid="1" type="file" name="fileData" accept=".mts,.MTS,.qt,.mov,.mpg,.avi,.mp3,.m4a,.wav,.mp4,.wma,.vob,.flv,.f4v,.asf,.qt,.mov,.mpeg,.avi,.wmv,.m4v,.3gp,.jpg,.jpeg,.bmp,.png,.gif,.tif,.tiff,.mkv,.QT,.MOV,.MPG,.AVI,.MP3,.M4A,.WAV,.MP4,.WMA,.VOB,.FLV,.F4V,.ASF,.QT,.MOV,.MPEG,.AVI,.WMV,.M4V,.3GP,.JPG,.JPEG,.BMP,.PNG,.GIF,.TIF,.TIFF,.MKV,.AIFF,.arf,.ARF,.webm,.WEBM,.rm,.RM,.ra,.RA,.RV,.rv,.aiff">
+            <input id="fileinput" class="fileinput" data-uploadboxid="1" type="file" name="fileData" accept="video/*">
             </button>
           </form>
         </div>
@@ -28,5 +28,6 @@
 
       </div>
       <div id="entry_details" class="entry_details hidden"></div>
+      <input id="kaltura-upload-token-id" hidden></input>
       <script async src="++plone++rfa.kaltura2/js/kalturaFileUploader.js"></script>
     </html>
