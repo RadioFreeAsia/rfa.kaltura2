@@ -1,13 +1,15 @@
-<html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  tal:omit-tag="">
+
   <div id="uploadHook" />
-
-
   <div id="uploadbox1">
 
     <div class="relative">
       <div id="uploadbutton">
         <button id='fileupload-btn' class="fileinput-button">
-          Choose a file to upload   		
+          Choose a file to upload
           <input id="fileinput" class="fileinput" data-uploadboxid="1" type="file" name="fileData" accept="video/*"></input>
         </button>
       </div>
@@ -31,6 +33,39 @@
 
 
   <div id="entry_details" class="entry_details hidden"></div>
-  <input id="kaltura-upload-token-id" hidden></input>
+  <!-- id view/id;
+       name view/name;
+   -->
+  <input id="form-widgets-upload_token_id" name="form.widgets.upload_token_id" class="" title="" lang="" disabled=""
+           readonly="" alt="" tabindex="" accesskey="" size="" maxlength=""
+           style="" value="" type="text"
+           tal:attributes="class view/klass;
+                           style view/style;
+                           title view/title;
+                           lang view/lang;
+                           onclick view/onclick;
+                           ondblclick view/ondblclick;
+                           onmousedown view/onmousedown;
+                           onmouseup view/onmouseup;
+                           onmouseover view/onmouseover;
+                           onmousemove view/onmousemove;
+                           onmouseout view/onmouseout;
+                           onkeypress view/onkeypress;
+                           onkeydown view/onkeydown;
+                           onkeyup view/onkeyup;
+                           value view/value;
+                           disabled view/disabled;
+                           tabindex view/tabindex;
+                           onfocus view/onfocus;
+                           onblur view/onblur;
+                           onchange view/onchange;
+                           readonly view/readonly;
+                           alt view/alt;
+                           accesskey view/accesskey;
+                           onselect view/onselect;
+                           size view/size;
+                           maxlength view/maxlength;
+                           placeholder view/placeholder;
+                           autocapitalize view/autocapitalize;" />
 <script script async src="++plone++rfa.kaltura2/js/kalturaFileUploader.js"></script>
 </html>
