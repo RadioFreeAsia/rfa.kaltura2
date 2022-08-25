@@ -1,0 +1,9 @@
+.cancelBtn {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.cancelBtn:hover {
+    background-color: #da3833;
+    color: #fff;
+}

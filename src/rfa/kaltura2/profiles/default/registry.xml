@@ -7,50 +7,11 @@
    <records prefix="plone.resources/kalturaFileUploader" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
       <value key="js">++plone++rfa.kaltura2/js/kalturaFileUploader.js</value>
       <value key="css">
-         <element>++plone++rfa.kaltura2/css/filepond.min.css</element>
+         <element>++plone++rfa.kaltura2/css/jquery.fileupload-ui.css</element>
+         <element>++plone++rfa.kaltura2/css/jquery.fileupload-ui-kaltura.css</element>
+         <element>++plone++rfa.kaltura2/css/style.css</element>
       </value>
    </records>
 
-   <records prefix="plone.resources/filepond" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
-      <value key="js">https://unpkg.com/filepond/dist/filepond.js</value>
-      <!-- <value key="load_async">False</value> -->
-      <!-- <value key="load_defer">True</value> -->
-   </records>
-
-   <records prefix="plone.resources/filepondesm" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
-      <value key="js">++plone++rfa.kaltura2/js/filepond.esm.min.js</value>
-   </records>
-
-
-   <!-- <records prefix="plone.resources/a_kulturaFileUploader" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
-       <value key="js">++plone++rfa.kaltura2/filepond.min.js</value>
-       <value key="js">++plone++rfa.kaltura2/filepond.esm.min.js</value>
-       <value key="js">++plone++rfa.kaltura2/kulturaFileUploader.js</value>
-
-
-       <value key="js">
-         <element>++plone++rfa.kaltura2/kulturaFileUploader.js</element>
-         <element>++plone++rfa.kaltura2/filepond.min.js</element>
-         <element>++plone++rfa.kaltura2/filepond.esm.min.js</element>
-        </value>
-        <value key="css">
-         <element>++plone++rfa.kaltura2/filepond.min.css</element>
-        </value>
-
-
-</records> -->
-
-
-<!--  Bundle defined, but not used.
-    <records prefix="plone.bundles/rfa.kaltura" interface='Products.CMFPlone.interfaces.IBundleRegistry'>
-    <value key="enabled">True</value>
-    <value key="jscompilation">++resource++mycustom.js</value>
-    <value key="csscompilation">++resource++mycustom.css</value>
-
-    <value key="last_compilation">2019-11-26 00:00:00</value>
-    <value key="compile">False</value>
-    <value key="depends">plone</value>
-  </records>
-   -->
 </registry>
 
