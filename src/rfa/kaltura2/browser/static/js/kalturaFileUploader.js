@@ -109,7 +109,6 @@ require([
             $('#kaltura-upload-token-id').val(data.uploadTokenId);
 
             console.log('upload complete success: ' + encodeURIComponent(file.name) + '/token/' + data.uploadTokenId + '/boxId/' + uploadBoxId);
-            console.log('Next, call the media.add and media.addContent API actions to create your Kaltura Media Entry and associate it with this newly uploaded file. Once media.addContent is called, the transcoding process will begin and your media entry will be prepared for playback and sharing. Use the Kaltura JS client library or call your backend service to execute media.add and media.addContent passing the uploadTokenId.');
         })
         // upload error
         .bind('fileuploaderror', function (e, data) {

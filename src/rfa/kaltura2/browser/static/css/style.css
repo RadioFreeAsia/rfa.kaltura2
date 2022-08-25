@@ -1,7 +1,3 @@
-label[for='form-widgets-video_file'] {
-    text-transform: capitalize;
-}
-
 #fileupload-btn {
     background-color: #2385c4;
     border-color: #1b6899;
@@ -24,4 +20,11 @@ label[for='form-widgets-video_file'] {
 .cancelBtn:hover {
     background-color: #da3833;
     color: #fff;
+}
+
+label[for='form-widgets-video_file'] {
+    text-transform: capitalize;
+}
+#upload-file-info {
+    padding: 0.5rem 0;
 }
