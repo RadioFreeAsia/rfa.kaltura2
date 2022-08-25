@@ -27,9 +27,6 @@ def addVideo(context, event):
     mediaEntry = IKalturaMediaEntryProvider(context).getEntry()
     (client, session) = kconnect()
 
-    #Do the upload of the video file
-    uploadTokenId = uploadVideo(context, client)
-
     #associate the upload with this mediaEntry
     mediaEntry = client.media.addFromUploadedFile(mediaEntry, uploadTokenId)
 
