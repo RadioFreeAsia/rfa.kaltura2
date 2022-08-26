@@ -59,7 +59,7 @@ class IKaltura_Video(model.Schema):
 
     #let's put the upload token id in here.
     upload_token_id = schema.TextLine(
-        title=_('upload token'),
+        title=_('Video File'),
         required=True,
     )
 

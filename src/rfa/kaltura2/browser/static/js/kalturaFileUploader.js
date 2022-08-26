@@ -8,6 +8,7 @@ function appendStyle(url) {
     document.head.appendChild(link);
 }
 
+
 async function getKsToken() {
     const responce = await fetch('./getKs');
     const data = await responce.json();
@@ -40,7 +41,14 @@ require([
     fileuploadKalturaBase
 ) {
 
-    console.log('doc ready');
+    // runs when the video already exists
+    if ($('#upload-token-container > input').val().length) {
+        $("<span class='warningMsg'>You already have a file selected </span>").insertBefore("#uploadbutton");
+        $('#fileupload-btn').text('Click here to upload a new file');
+        $('#fileupload-btn').click(() => {
+            $('#upload-token-container > input').val('');
+        })
+    }
 
     const categoryId = -1;
 
@@ -105,10 +113,7 @@ require([
             const file = data.files[0];
 
             $('#upload-file-info').addClass('hidden');
-
-            $('#form-widgets-upload_token_id').val(data.uploadTokenId);
-
-            console.log('upload complete success: ' + encodeURIComponent(file.name) + '/token/' + data.uploadTokenId + '/boxId/' + uploadBoxId);
+            $('#upload-token-container > input').val(data.uploadTokenId);
         })
         // upload error
         .bind('fileuploaderror', function (e, data) {
@@ -127,7 +132,7 @@ require([
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const uploadBox = widget.fileupload('getUploadBox', uploadBoxId);
             $("#entry_details", uploadBox).addClass('hidden');
-            console.log('Upload Cancel');
+            $('#fileupload-btn').removeAttr('disabled');
         });
 
     // bind to the first upload input

@@ -1,7 +1,5 @@
-<html
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:tal="http://xml.zope.org/namespaces/tal"
-  tal:omit-tag="">
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:tal="http://xml.zope.org/namespaces/tal" tal:omit-tag="">
 
   <div id="uploadHook" />
   <div id="uploadbox1">
@@ -25,21 +23,20 @@
     </div>
 
     <div id="successmsg" class="alert alert-success hidden text-center">
-      <span class="large">
-        <strong>Upload Completed</strong>
+      <span class="">
+        <strong>Upload successful.</strong> 
+        Please proceed to save the page to begin the transcoding process for your media to be 
+        prepared for playback and sharing.
       </span>
     </div>
   </div>
 
 
-  <div id="entry_details" class="entry_details hidden"></div>
-  <!-- id view/id;
-       name view/name;
-   -->
-  <input id="form-widgets-upload_token_id" name="form.widgets.upload_token_id" class="" title="" lang="" disabled=""
-           readonly="" alt="" tabindex="" accesskey="" size="" maxlength=""
-           style="" value="" type="text"
-           tal:attributes="class view/klass;
+  <div id="upload-token-container" class="hidden">
+    <input hidden id="" name="" class="" title="" lang="" disabled="" readonly="" alt="" tabindex="" accesskey="" size="" maxlength="" style="" value="" type="text" tal:attributes="
+                           id view/id;
+                           name view/name;
+                           class view/klass;
                            style view/style;
                            title view/title;
                            lang view/lang;
@@ -67,5 +64,6 @@
                            maxlength view/maxlength;
                            placeholder view/placeholder;
                            autocapitalize view/autocapitalize;" />
-<script script async src="++plone++rfa.kaltura2/js/kalturaFileUploader.js"></script>
+  </div>
+  <script script async src="++plone++rfa.kaltura2/js/kalturaFileUploader.js"></script>
 </html>

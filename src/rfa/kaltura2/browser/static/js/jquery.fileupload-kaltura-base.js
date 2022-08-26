@@ -60,6 +60,7 @@
                 // catch the cancel event and abort the upload
                 $('.cancelBtn', uploadbox).click(function (event) {
                     if ( data.jqXHR) {
+                        event.preventDefault();
                         data.jqXHR.abort();
                     }
                     else{

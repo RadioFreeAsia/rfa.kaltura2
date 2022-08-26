@@ -26,3 +26,8 @@
     padding: 1rem;
     text-align: center;
 }
+
+.warningMsg {
+    display: block;
+    margin: 1rem 0;
+}
