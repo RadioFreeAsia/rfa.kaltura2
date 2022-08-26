@@ -106,7 +106,7 @@ require([
 
             $('#upload-file-info').addClass('hidden');
 
-            $('#kaltura-upload-token-id').val(data.uploadTokenId);
+            $('#form-widgets-upload_token_id').val(data.uploadTokenId);
 
             console.log('upload complete success: ' + encodeURIComponent(file.name) + '/token/' + data.uploadTokenId + '/boxId/' + uploadBoxId);
         })

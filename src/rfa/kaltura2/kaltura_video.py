@@ -58,13 +58,13 @@ class IKaltura_Video(model.Schema):
     )
 
     #let's put the upload token id in here.
-    video_file = schema.Text(
-        title=_('video file'),
+    upload_token_id = schema.TextLine(
+        title=_('upload token'),
         required=True,
     )
 
     directives.widget(
-        'video_file',
+        'upload_token_id',
         FileUploadWidget,
     )
 
