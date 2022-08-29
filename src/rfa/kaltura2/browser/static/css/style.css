@@ -1,11 +1,11 @@
-#fileupload-btn {
+#fileuploadBtn {
     background-color: #2385c4;
     border-color: #1b6899;
     color: #fff;
     border-radius: 4px;
 }
 
-#fileupload-btn:hover {
+#fileuploadBtn:hover {
     background-color: #1b6899;
     border-color: #124465;
     color: #fff;
@@ -30,4 +30,8 @@
 .warningMsg {
     display: block;
     margin: 1rem 0;
+}
+
+.successFileName {
+    display: block;
 }

@@ -9,6 +9,7 @@ function appendStyle(url) {
 }
 
 
+
 async function getKsToken() {
     const responce = await fetch('./getKs');
     const data = await responce.json();
@@ -43,25 +44,39 @@ require([
 
     // runs when the video already exists
     if ($('#upload-token-container > input').val().length) {
-        $("<span class='warningMsg'>You already have a file selected </span>").insertBefore("#uploadbutton");
-        $('#fileupload-btn').text('Click here to upload a new file');
-        $('#fileupload-btn').click(() => {
+
+        $('#fileuploadBtn').text('Click here to upload a new file');
+        $('#fileuploadBtn').click(() => {
             $('#upload-token-container > input').val('');
         })
+
+        $.ajax({
+            url: `https://www.kaltura.com/api_v3/service/uploadtoken/action/get?
+            ks=${KALTURA_SESSION_TOKEN}&format=1`,
+            data: { uploadTokenId: $('#upload-token-container > input').val() },
+            type: "POST",
+            dataType: 'json'
+        }).done((response) => {
+            $(`<span class='warningMsg'>
+                    You already have a file selected: 
+                    <strong>${response.fileName}</strong>
+                </span>`)
+            .insertBefore("#uploadbutton");
+        });
     }
 
     const categoryId = -1;
 
     widget = $('#uploadHook').fileupload({
-        maxChunkSize: 3000000,
-        dynamicChunkSizeInitialChunkSize: 1000000,
+        maxChunkSize: 10000000,
+        dynamicChunkSizeInitialChunkSize: 10000000,
         dynamicChunkSizeThreshold: 50000000,
         dynamixChunkSizeMaxTime: 30,
         host: "https://www.kaltura.com",
         apiURL: "https://www.kaltura.com/api_v3/",
         url: "https://www.kaltura.com/api_v3/?service=uploadToken&action=upload&format=1",
         ks: KALTURA_SESSION_TOKEN,
-        fileTypes: `*.mts;*.MTS;*.qt;*.mov;*.mpg;*.avi;*.mp3;*.m4a;*.wav;*.mp4;
+        fileTypes: `*.mts;*.MTS;*.qt;*.mov;*.mpg;*.avi;*.m4a;*.mp4;
         *.wma;*.vob;*.flv;*.f4v;*.asf;*.qt;*.mov;*.mpeg;*.avi;*.wmv;*.m4v;*.3gp;
         *.mkv;*.QT;*.MOV;*.MPG;*.AVI;*.M4A;*.WAV;*.MP4;*.WMA;*.VOB;*.FLV;*.F4V;*.ASF;*.QT;*.MOV;*.MPEG;
         *.AVI;*.WMV;*.M4V;*.3GP;*.MKV;*.webm;*.WEBM;
@@ -93,7 +108,7 @@ require([
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const file = data.files[0];
             const uploadManager = widget.fileupload("getUploadManager");
-            $('#fileupload-btn').attr('disabled', '');
+            $('#fileuploadBtn').attr('disabled', '');
 
             if (file.error === undefined) {
                 const context = widget.fileupload('option', 'context');
@@ -101,7 +116,6 @@ require([
                 console.log('now uploading file name: ' + encodeURIComponent(file.name));
                 //here we should display an edit entry form to allow the user to add/save metadata to the entry
                 $("#uploadbox" + uploadBoxId + " .entry_details").removeClass('hidden');
-
             } else {
                 console.log('some kind of error when starting to upload ' + file.error);
             }
@@ -109,10 +123,12 @@ require([
         // upload done
         .bind('fileuploaddone', function (e, data) {
             console.log('fileuploaddone');
+            console.log('fileuploaddone');
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const file = data.files[0];
 
             $('#upload-file-info').addClass('hidden');
+            $('.successFileName').text('Successfully uploaded file: ' + file.name);
             $('#upload-token-container > input').val(data.uploadTokenId);
         })
         // upload error
@@ -132,7 +148,7 @@ require([
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const uploadBox = widget.fileupload('getUploadBox', uploadBoxId);
             $("#entry_details", uploadBox).addClass('hidden');
-            $('#fileupload-btn').removeAttr('disabled');
+            $('#fileuploadBtn').removeAttr('disabled');
         });
 
     // bind to the first upload input
@@ -142,6 +158,6 @@ require([
             uploadBoxId: 1
         });
         console.log('file chosen');
-        $('#fileupload-btn').attr('disabled', '');
+        $('#fileuploadBtn').attr('disabled', '');
     });
 });

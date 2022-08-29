@@ -26,22 +26,22 @@
     $.widget('blueimp.fileupload', $.blueimp.fileupload, {
 
         options: {
-            ignoreChunkHeader:true,
+            ignoreChunkHeader: true,
             dataType: 'json',
-            uploadBoxId : null,
-            jqXHR : null,
+            uploadBoxId: null,
+            jqXHR: null,
             context: null,
 
-            add: function(e,data){
+            add: function (e, data) {
                 var widget = $(e.target);
                 if (widget.fileupload('option', 'addConfirmCallback')) {
                     if (!widget.fileupload('option', 'addConfirmCallback')()) {
                         return;
                     }
                 }
-                var uploadBoxId = widget.fileupload('getUploadBoxId',e,data);
+                var uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
                 data.uploadBoxId = uploadBoxId;
-                var uploadbox = widget.fileupload('getUploadBox',uploadBoxId);
+                var uploadbox = widget.fileupload('getUploadBox', uploadBoxId);
                 if (uploadbox.data('uplsuccessmsghtml')) {
                     $("#successmsg", uploadbox).html(uploadbox.data('uplsuccessmsghtml'));
                     $("#successmsg", uploadbox).removeClass('alert-danger').addClass('alert-success');
@@ -59,13 +59,27 @@
 
                 // catch the cancel event and abort the upload
                 $('.cancelBtn', uploadbox).click(function (event) {
-                    if ( data.jqXHR) {
-                        event.preventDefault();
+                    // prevent page refresh
+                    event.preventDefault();
+
+                    // cleanup upload Token from kaltura
+                    if (data.jqXHR) {
+                        $.ajax({
+                            url: `${widget.fileupload('option', 'apiURL')}service/uploadtoken/action/delete?
+                            ks=${data.formData.ks}&format=1`,
+                            data: { uploadTokenId: data.formData.uploadTokenId },
+                            type: "POST",
+                            dataType: 'json'
+                        }).done((response) => {
+                            console.log(response);
+                        });
+
                         data.jqXHR.abort();
                     }
-                    else{
+                    else {
+                        console.log('else')
                         data.textStatus = 'abort';
-                        widget.fileupload('option','fail')(e,data);
+                        widget.fileupload('option', 'fail')(e, data);
                     }
                     uploadManager.removeWidget(uploadBoxId);
                 });
@@ -74,10 +88,10 @@
                 $.blueimp.fileupload.prototype.autoUpload = false;
                 originalAdd.call(this, e, data);
 
-                if(file.error !== undefined){
+                if (file.error !== undefined) {
                     $(this).fileupload('onError', file.error, uploadBoxId);
                 }
-                else{
+                else {
                     if (!uploadManager.hasWidget(uploadBoxId)) {
                         // add the upload the the upload manager
                         uploadManager.addWidget(widget, e, data);
@@ -85,8 +99,8 @@
                 }
             },
             progress: function (e, data) {
-                var widget = $(e.target);                
-                var uploadBoxId = widget.fileupload('getUploadBoxId',e,data);
+                var widget = $(e.target);
+                var uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
 
                 // update the progress only in incremental values
                 var progressBar = '#uploadbox' + uploadBoxId + ' #progress #progressBar';
@@ -103,12 +117,12 @@
 
                 displayProgress(text, progress, uploadBoxId);
             },
-            done: function(e,data){
-                var widget = $(e.target);                
-                var uploadBoxId = widget.fileupload('getUploadBoxId',e,data);
+            done: function (e, data) {
+                var widget = $(e.target);
+                var uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
                 if (data.textStatus == 'success') {
                     // succesful upload
-                    var uploadbox = widget.fileupload('getUploadBox',uploadBoxId);
+                    var uploadbox = widget.fileupload('getUploadBox', uploadBoxId);
                     $("#progress", uploadbox).addClass('progress-success').removeClass('active');
                     $("#successmsg", uploadbox).removeClass('hidden');
                     $("#cancelBtn", uploadbox).addClass('hidden');
@@ -118,21 +132,21 @@
                     var uploadManager = UploaderManagerSingleton.getInstance();
                     uploadManager.removeWidget(uploadBoxId);
                 }
-                else{
-                    widget.fileupload('onError', data.textStatus, uploadBoxId);                    
+                else {
+                    widget.fileupload('onError', data.textStatus, uploadBoxId);
                 }
             },
-            addfail: function(e,data){
+            addfail: function (e, data) {
                 var widget = $(e.target);
-                var uploadBoxId = widget.fileupload('getUploadBoxId',e,data);
-                widget.fileupload('onError', data.message, uploadBoxId);                                    
+                var uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
+                widget.fileupload('onError', data.message, uploadBoxId);
             },
-            failed: function(e, data){
+            failed: function (e, data) {
                 var widget = $(e.target);
-                var uploadBoxId = widget.fileupload('getUploadBoxId',e,data);
+                var uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
                 widget.fileupload('onError', 'could not upload file', uploadBoxId);
             },
-            fail: function(e, data){
+            fail: function (e, data) {
                 var widget = $(e.target);
 
                 // call the original fail
@@ -140,11 +154,11 @@
                     originalFail.call(this, e, data);
                 }
 
-                var uploadBoxId = widget.fileupload('getUploadBoxId',e,data);
+                var uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
                 var uploadManager = UploaderManagerSingleton.getInstance();
                 var error = '';
 
-                var uploadbox = widget.fileupload('getUploadBox',uploadBoxId);
+                var uploadbox = widget.fileupload('getUploadBox', uploadBoxId);
 
                 if (data.errorThrown) {
                     error = data.errorThrown;
@@ -155,7 +169,7 @@
 
                 if (error == 'timeout') {
                     // try and reload
-                    setTimeout(function(){uploadManager.resumeUpload(uploadBoxId);},1000);     
+                    setTimeout(function () { uploadManager.resumeUpload(uploadBoxId); }, 1000);
                 }
                 else if (error == 'abort') {
                     // update the status message
@@ -167,48 +181,49 @@
                     $("#successmsg", uploadbox).text(('Upload Cancelled') + '!').removeClass('hidden').toggleClass('alert-danger alert-success');
 
                     // notify by callback
-                    widget.fileupload('onCancel', uploadBoxId);                    
+                    widget.fileupload('onCancel', uploadBoxId);
 
                     // remove this widget from the uploads manager
                     uploadManager.removeWidget(uploadBoxId);
                 }
-                else if(data.textStatus.code){
+                else if (data.textStatus.code) {
                     // server error - do not reload
                     widget.fileupload('onError', error, uploadBoxId);
                     uploadManager.removeWidget(uploadBoxId);
                 }
                 else {
                     // if we have an upload token, try to reload
-                    if (data.uploadTokenId) {                
-                        setTimeout(function(){uploadManager.resumeUpload(uploadBoxId);},5000);
+                    if (data.uploadTokenId) {
+                        setTimeout(function () { uploadManager.resumeUpload(uploadBoxId); }, 5000);
                     }
-                    else{
+                    else {
                         widget.fileupload('onError', error, uploadBoxId);
-                        uploadManager.removeWidget(uploadBoxId);                        
+                        uploadManager.removeWidget(uploadBoxId);
                     }
                 }
             }
         },
-        getUploadManager: function(){
+        getUploadManager: function () {
             return UploaderManagerSingleton.getInstance();
         },
-        onError: function(error, uploadBoxId){
+        onError: function (error, uploadBoxId) {
             displayError(error, uploadBoxId);
-            this._trigger( "error", null, { error: error, uploadBoxId: uploadBoxId } );
+            this._trigger("error", null, { error: error, uploadBoxId: uploadBoxId });
         },
-        onCancel: function(uploadBoxId){
-            this._trigger( "cancel", null, { uploadBoxId: uploadBoxId } );
+        onCancel: function (uploadBoxId) {
+            console.log('onCancel')
+            this._trigger("cancel", null, { uploadBoxId: uploadBoxId });
         },
-        getUploadBox: function(uploadboxId){
+        getUploadBox: function (uploadboxId) {
             return $('#uploadbox' + uploadboxId);
         },
-        getUploadBoxId: function(e, data){
+        getUploadBoxId: function (e, data) {
             // options
-            var widget = $(e.target);            
-            var uploadBoxId = widget.fileupload('option','uploadBoxId');
+            var widget = $(e.target);
+            var uploadBoxId = widget.fileupload('option', 'uploadBoxId');
             if (uploadBoxId) {
                 return uploadBoxId;
-            }  
+            }
             // data
             uploadBoxId = data.uploadBoxId;
             if (uploadBoxId) {
@@ -222,10 +237,10 @@
             uploadBoxId = input.data('uploadboxid');
             return uploadBoxId;
         },
-        addUploadBox: function (e, data){
+        addUploadBox: function (e, data) {
             //this is used to add another uploadBox to the screen and also in order to avoid dead-ends - for example with singleUpload config if an error occurred
             var widget = $(e.target);
-            var uploadBoxId = widget.fileupload('getUploadBoxId',e,data);
+            var uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             var categoryId = widget.fileupload('option', 'categoryId');
             /*var addUrl = baseUrl + "/entry/add/boxId/" + (uploadBoxId + 1) + "/catid/" + categoryId;
             var context2 = widget.fileupload('option', 'context');
@@ -241,12 +256,12 @@
     /**
      *  create a regex for accepted file types
      */
-     var formatFileTypes = function(fileTypes){
+    var formatFileTypes = function (fileTypes) {
         var fileTypesRegex = null;
 
         if (fileTypes) {
-            fileTypes = fileTypes.replace(/;?\*\./g,'|');
-            fileTypesRegex = new RegExp("(\\.|\\/)(" + fileTypes + ")$",'i');
+            fileTypes = fileTypes.replace(/;?\*\./g, '|');
+            fileTypesRegex = new RegExp("(\\.|\\/)(" + fileTypes + ")$", 'i');
         }
 
         return fileTypesRegex;
@@ -256,17 +271,17 @@
     /**
      *  format file size
      */
-     var formatSize = function(size){
+    var formatSize = function (size) {
         var val = '';
-       
-       //  display gigbytes
-        if(Math.floor(size / 1024 / 1024 / 1024) >= 1) {
-            val += Math.round(size / 1024 / 1024 / 1024 * 100)/100 + 'Gb';
+
+        //  display gigbytes
+        if (Math.floor(size / 1024 / 1024 / 1024) >= 1) {
+            val += Math.round(size / 1024 / 1024 / 1024 * 100) / 100 + 'Gb';
         }
         // display megabytes if file size more than 5mb
         // otherwise display kilobytes
-        else if(Math.floor(size / 1024 / 1024) >= 5) {
-            val += Math.round(size / 1024 / 1024 * 100)/100 + 'Mb';
+        else if (Math.floor(size / 1024 / 1024) >= 5) {
+            val += Math.round(size / 1024 / 1024 * 100) / 100 + 'Mb';
         }
         else {
             val += Math.round(size / 1024, 2) + 'Kb';
@@ -278,7 +293,7 @@
     /**
      *  display errors
      */
-    var displayError = function(error, uploadBoxId){
+    var displayError = function (error, uploadBoxId) {
         var widget = '#uploadbox' + uploadBoxId;
         $(widget + ' #progressBar').html(('Oops') + '! ' + error).width('100%');
         $(widget + " #progress").addClass('progress-danger').removeClass('active');
@@ -290,55 +305,55 @@
     /**
      *  display progress
      */
-    var displayProgress = function(text, progress, uploadBoxId){
+    var displayProgress = function (text, progress, uploadBoxId) {
         // use widget id to bypass mixup with this, $this and that
         var widget = '#uploadbox' + uploadBoxId + ' #progress #progressBar';
         var widgetText = '#uploadbox' + uploadBoxId + ' #progress .anchor .message';
         $(widgetText).text(text);
-        $(widget).css('width', Math.max(progress,1) + '%');
-    };    
+        $(widget).css('width', Math.max(progress, 1) + '%');
+    };
 
 
     /**
      *  KMS uploader widget manager
      */
-    function UploaderManager(){
+    function UploaderManager() {
         this.widgets = {};
         this.uploads = {};
 
-        this.addWidget = function($this, e, data){
+        this.addWidget = function ($this, e, data) {
             var uploadBoxId = data.uploadBoxId;
 
             if (!this.widgets[uploadBoxId]) {
-                this.widgets[uploadBoxId] = {w: $this, e:e, data: data};
+                this.widgets[uploadBoxId] = { w: $this, e: e, data: data };
             }
         };
 
-        this.hasWidget = function(uploadBoxId){
-            return typeof(this.widgets[uploadBoxId]) != 'undefined';
+        this.hasWidget = function (uploadBoxId) {
+            return typeof (this.widgets[uploadBoxId]) != 'undefined';
         };
 
-        this.removeWidget = function(uploadBoxId){
+        this.removeWidget = function (uploadBoxId) {
             if (this.widgets[uploadBoxId]) {
-                delete(this.widgets[uploadBoxId]);
+                delete (this.widgets[uploadBoxId]);
             }
         };
 
-        this.uploadsPending = function(){
+        this.uploadsPending = function () {
             return ($.fn.assocArraySize(this.widgets) > 0);
         };
 
-        this.resumeAllUploads = function(){
+        this.resumeAllUploads = function () {
             var key;
             for (key in this.widgets) {
-                if (this.widgets.hasOwnProperty(key)){
+                if (this.widgets.hasOwnProperty(key)) {
                     var widget = this.widgets[key];
                     $.blueimp.fileupload.prototype.options.add.call(widget.w, widget.e, widget.data);
                 }
             }
         };
 
-        this.resumeUpload = function(uploadBoxId){
+        this.resumeUpload = function (uploadBoxId) {
             if (this.widgets[uploadBoxId]) {
                 var widget = this.widgets[uploadBoxId];
                 $.blueimp.fileupload.prototype.options.add.call(widget.w, widget.e, widget.data);
@@ -376,7 +391,7 @@
         // check for uploads in progress
         var uploadManager = UploaderManagerSingleton.getInstance();
         if (!uploadManager.uploadsPending()) {
-            return void(0);
+            return void (0);
         }
 
         // resume the uploads

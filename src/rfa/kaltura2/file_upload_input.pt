@@ -6,7 +6,7 @@
 
     <div class="relative">
       <div id="uploadbutton">
-        <button id='fileupload-btn' class="fileinput-button">
+        <button id='fileuploadBtn' class="fileinput-button">
           Choose a file to upload
           <input id="fileinput" class="fileinput" data-uploadboxid="1" type="file" name="fileData" accept="video/*"></input>
         </button>
@@ -23,8 +23,10 @@
     </div>
 
     <div id="successmsg" class="alert alert-success hidden text-center">
-      <span class="">
-        <strong>Upload successful.</strong> 
+      <span>
+        <strong class="successFileName"></strong>
+      </span>
+      <span>
         Please proceed to save the page to begin the transcoding process for your media to be 
         prepared for playback and sharing.
       </span>
