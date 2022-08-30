@@ -113,9 +113,7 @@ require([
             if (file.error === undefined) {
                 const context = widget.fileupload('option', 'context');
                 console.log('upload context: ' + context);
-                console.log('now uploading file name: ' + encodeURIComponent(file.name));
                 //here we should display an edit entry form to allow the user to add/save metadata to the entry
-                $("#uploadbox" + uploadBoxId + " .entry_details").removeClass('hidden');
             } else {
                 console.log('some kind of error when starting to upload ' + file.error);
             }
@@ -136,7 +134,6 @@ require([
             console.log('fileuploaderror');
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const uploadBox = widget.fileupload('getUploadBox', uploadBoxId);
-            $("#entry_details", uploadBox).addClass('hidden');
             if (widget.fileupload('option', 'singleUpload')) {
                 // load the next uploadbox (if an error occured and it's a single upload do not cause a dead end for the user)
                 widget.fileupload('addUploadBox', e, data);
@@ -147,7 +144,6 @@ require([
             console.log('fileuploadcancel');
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const uploadBox = widget.fileupload('getUploadBox', uploadBoxId);
-            $("#entry_details", uploadBox).addClass('hidden');
             $('#fileuploadBtn').removeAttr('disabled');
         });
 
