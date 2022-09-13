@@ -8,8 +8,6 @@ function appendStyle(url) {
     document.head.appendChild(link);
 }
 
-
-
 async function getKsToken() {
     const responce = await fetch('./getKs');
     const data = await responce.json();
@@ -93,7 +91,6 @@ require([
     })
         // file added
         .bind('fileuploadadd', function (e, data) {
-            console.log('fileuploaded');
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             data.uploadBoxId = uploadBoxId;
             const uploadManager = widget.fileupload("getUploadManager");
@@ -104,7 +101,6 @@ require([
         })
         // actual upload start
         .bind('fileuploadsend', function (e, data) {
-            console.log('fileuploadsend');
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const file = data.files[0];
             const uploadManager = widget.fileupload("getUploadManager");
@@ -112,16 +108,12 @@ require([
 
             if (file.error === undefined) {
                 const context = widget.fileupload('option', 'context');
-                console.log('upload context: ' + context);
                 //here we should display an edit entry form to allow the user to add/save metadata to the entry
             } else {
-                console.log('some kind of error when starting to upload ' + file.error);
             }
         })
         // upload done
         .bind('fileuploaddone', function (e, data) {
-            console.log('fileuploaddone');
-            console.log('fileuploaddone');
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const file = data.files[0];
 
@@ -141,7 +133,6 @@ require([
         })
         // upload cancelled
         .bind('fileuploadcancel', function (e, data) {
-            console.log('fileuploadcancel');
             const uploadBoxId = widget.fileupload('getUploadBoxId', e, data);
             const uploadBox = widget.fileupload('getUploadBox', uploadBoxId);
             $('#fileuploadBtn').removeAttr('disabled');
@@ -153,7 +144,6 @@ require([
             fileInput: $(this),
             uploadBoxId: 1
         });
-        console.log('file chosen');
         $('#fileuploadBtn').attr('disabled', '');
     });
 });

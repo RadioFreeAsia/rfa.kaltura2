@@ -71,13 +71,11 @@
                             type: "POST",
                             dataType: 'json'
                         }).done((response) => {
-                            console.log(response);
                         });
 
                         data.jqXHR.abort();
                     }
                     else {
-                        console.log('else')
                         data.textStatus = 'abort';
                         widget.fileupload('option', 'fail')(e, data);
                     }
@@ -211,7 +209,6 @@
             this._trigger("error", null, { error: error, uploadBoxId: uploadBoxId });
         },
         onCancel: function (uploadBoxId) {
-            console.log('onCancel')
             this._trigger("cancel", null, { uploadBoxId: uploadBoxId });
         },
         getUploadBox: function (uploadboxId) {
@@ -339,10 +336,6 @@
             }
         };
 
-        this.uploadsPending = function () {
-            return ($.fn.assocArraySize(this.widgets) > 0);
-        };
-
         this.resumeAllUploads = function () {
             var key;
             for (key in this.widgets) {
@@ -380,34 +373,5 @@
             }
         };
     })();
-
-
-
-    /**
-     *  handle the user navigating of page while uploads are in progress
-     */
-    window.onbeforeunload = function (e) {
-
-        // check for uploads in progress
-        var uploadManager = UploaderManagerSingleton.getInstance();
-        if (!uploadManager.uploadsPending()) {
-            return void (0);
-        }
-
-        // resume the uploads
-        uploadManager.resumeAllUploads();
-
-        // show the user message
-        var message = ("You're still uploading! Are you sure you want to leave this page?");
-
-        var e = e || window.event;
-        // For IE and Firefox prior to version 4
-        if (e) {
-            e.returnValue = message;
-        }
-
-        // For Safari
-        return message;
-    };
 }));
 
