@@ -51,21 +51,18 @@ def modifyVideo(context, event):
     thumbnail_changed = False
 
     if hasattr(event, 'descriptions') and event.descriptions:
-        for d in event.descriptions:
-            if d.interface is IKaltura_Video and 'video_file' in d.attributes:
+        for descr in event.descriptions:
+            if descr.interface is IKaltura_Video and 'upload_token_id' in descr.attributes:
                 file_changed = True
-            if d.interface is IKaltura_Video and 'custom_thumbnail' in d.attributes:
+            if descr.interface is IKaltura_Video and 'custom_thumbnail' in descr.attributes:
                 thumbnail_changed = True
-    (client, session) = kconnect()
 
+    (client, session) = kconnect()
     mediaEntry = client.media.update(entryId, newMediaEntry)
     context.KalturaObject = mediaEntry
 
     if file_changed:
-        logger.log('uploading new video for %s' % (context.getId(),),
-               level=logging.WARN)
-
-        uploadTokenId = uploadVideo(context, client)
+        uploadTokenId = context.upload_token_id
         resource = KalturaUploadedFileTokenResource()
         resource.setToken(uploadTokenId)
         try:
