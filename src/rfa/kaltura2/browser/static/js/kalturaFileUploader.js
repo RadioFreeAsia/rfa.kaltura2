@@ -43,7 +43,7 @@ require([
     // runs when the video already exists
     if ($('#upload-token-container > input').val().length) {
 
-        $('#fileuploadBtn').text('Click here to upload a new file');
+        $('#fileuploadBtn')[0].childNodes[0].nodeValue = 'Click here to upload a new file';
         $('#fileuploadBtn').click(() => {
             $('#upload-token-container > input').val('');
         })
@@ -120,6 +120,9 @@ require([
             $('#upload-file-info').addClass('hidden');
             $('.successFileName').text('Successfully uploaded file: ' + file.name);
             $('#upload-token-container > input').val(data.uploadTokenId);
+            
+            // remove the input element to avoid passing it back to plone
+            $('#fileinput').remove();
         })
         // upload error
         .bind('fileuploaderror', function (e, data) {

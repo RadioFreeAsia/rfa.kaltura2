@@ -6,13 +6,13 @@
 
     <div class="relative">
       <div id="uploadbutton">
-        <button id='fileuploadBtn' class="fileinput-button">
+        <button id='fileuploadBtn' class="fileinput-button" type="button">
           Choose a file to upload
           <input id="fileinput" class="fileinput" data-uploadboxid="1" type="file" name="fileData" accept="video/*"></input>
         </button>
       </div>
       <span id="upload-file-info" class="label"></span>
-      <button class="cancelBtn hidden pull-right" title="Cancel" id="cancelBtn">Cancel</button>
+      <button class="cancelBtn hidden pull-right" title="Cancel" id="cancelBtn" type="button">Cancel</button>
     </div>
 
     <div id="progress" class="progress hidden">
