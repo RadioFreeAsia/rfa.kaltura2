@@ -67,5 +67,8 @@
                            placeholder view/placeholder;
                            autocapitalize view/autocapitalize;" />
   </div>
+  <div id="file-name-container" class="hidden">
+    <input name="video_file_name" hidden type="text" />
+  </div>
   <script script async src="++plone++rfa.kaltura2/js/kalturaFileUploader.js"></script>
 </html>

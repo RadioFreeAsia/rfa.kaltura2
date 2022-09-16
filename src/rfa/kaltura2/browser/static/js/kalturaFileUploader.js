@@ -120,6 +120,7 @@ require([
             $('#upload-file-info').addClass('hidden');
             $('.successFileName').text('Successfully uploaded file: ' + file.name);
             $('#upload-token-container > input').val(data.uploadTokenId);
+            $('#file-name-container > input').val(file.name);
             
             // remove the input element to avoid passing it back to plone
             $('#fileinput').remove();
