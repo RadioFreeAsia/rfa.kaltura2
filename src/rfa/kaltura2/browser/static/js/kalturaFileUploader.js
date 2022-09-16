@@ -43,11 +43,14 @@ require([
     // runs when the video already exists
     if ($('#upload-token-container > input').val().length) {
 
+        // change btn label
         $('#fileuploadBtn')[0].childNodes[0].nodeValue = 'Click here to upload a new file';
+        // clear old token on the fileupload click
         $('#fileuploadBtn').click(() => {
             $('#upload-token-container > input').val('');
         })
 
+        // lookup video file information from the upload token
         $.ajax({
             url: `https://www.kaltura.com/api_v3/service/uploadtoken/action/get?
             ks=${KALTURA_SESSION_TOKEN}&format=1`,
@@ -60,6 +63,8 @@ require([
                     <strong>${response.fileName}</strong>
                 </span>`)
             .insertBefore("#uploadbutton");
+            $('#file-name-container > input').val(response.fileName);
+
         });
     }
 
