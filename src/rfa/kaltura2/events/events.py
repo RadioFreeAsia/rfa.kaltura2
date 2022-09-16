@@ -1,5 +1,5 @@
 import logging
-
+import copy
 
 from KalturaClient.Plugins.Core import KalturaEntryModerationStatus
 from KalturaClient.Plugins.Core import KalturaUploadedFileTokenResource
@@ -39,6 +39,20 @@ def addVideo(context, event):
     #make sure categories set in Plone are set for this MediaEntry
     syncCategories(context, client)
 
+    #Try to set the id of the kaltura video based on the filename of the uploaded file.
+    new_name = context.REQUEST.form.get('video_file_name')
+
+    if new_name:
+        parent = context.aq_parent
+        old_id = copy.copy(context.id)  # I don't want to reference context in the rename
+
+        # avoid name colissions in a very lazy way.
+        i=0
+        while new_name in parent.objectIds():
+            i += 1
+            new_name = f"{new_name}-{i}"
+
+        parent.manage_renameObject(old_id, new_name)
 
 def modifyVideo(context, event):
     """Fired when the object is edited
