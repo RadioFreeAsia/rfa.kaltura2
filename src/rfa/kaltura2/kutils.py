@@ -45,8 +45,17 @@ KalturaLoggerInstance = KalturaLogger()
 #monkeypatch for testing purposes
 getCredentials = credentials.getCredentials
 
+#const
+KALTURA_SESSION_TIME = 86400
 
-def kconnect(partner_id=None):
+def kconnect(partner_id=None, force_new=False):
+
+    if force_new:
+        (client, ks) = get_new_session(partner_id)
+        cache_session(ks,KALTURA_SESSION_TIME)
+        return (client, ks)
+
+def get_new_session(partner_id=None):
 
     creds = getCredentials()
     if partner_id is not None:
@@ -71,11 +80,19 @@ def kconnect(partner_id=None):
                                 creds['USER_NAME'],
                                 KalturaSessionType.ADMIN,
                                 creds['PARTNER_ID'],
-                                86400,
+                                KALTURA_SESSION_TIME,
                                 privacyString)
     client.setKs(ks)
 
     return (client, ks)
+
+def cache_session(ks, ttl=None):
+    if ttl is None:
+        ttl = KALTURA_SESSION_TIME
+
+    registry = getUtility(IRegistry)
+
+
 
 
 #@cache me?
