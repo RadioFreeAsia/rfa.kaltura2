@@ -12,6 +12,8 @@ from rfa.kaltura2.interfaces import IKalturaMediaEntry
 from rfa.kaltura2.vocabularies import VideoPlayerVocabularyFactory
 from rfa.kaltura2.vocabularies import CategoryVocabularyFactory
 from rfa.kaltura2.vocabularies import getTagVocabulary
+from rfa.kaltura2.widget import FileUploadWidget
+
 from collective import dexteritytextindexer
 
 from rfa.kaltura2 import _
@@ -55,10 +57,17 @@ class IKaltura_Video(model.Schema):
         vocabulary='plone.app.vocabularies.Keywords'
     )
 
-    video_file = NamedBlobFile(
-        title=_('video file'),
+    #let's put the upload token id in here.
+    upload_token_id = schema.TextLine(
+        title=_('Video File'),
+        required=True,
     )
-    model.primary('video_file')
+
+    directives.widget(
+        'upload_token_id',
+        FileUploadWidget,
+    )
+
     ##Hidden Fields
     #User never interacts with these fields
     directives.omitted('entryId', 'KalturaObject')

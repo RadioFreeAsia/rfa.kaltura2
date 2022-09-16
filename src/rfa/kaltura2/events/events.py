@@ -1,23 +1,26 @@
 import logging
 
+from zope.container.interfaces import INameChooser
+from Acquisition import aq_base
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from plone.locking.interfaces import ILockable
 
 from KalturaClient.Plugins.Core import KalturaEntryModerationStatus
 from KalturaClient.Plugins.Core import KalturaUploadedFileTokenResource
-from KalturaClient.Plugins.Core import KalturaThumbParams, KalturaThumbCropType, KalturaContainerFormat, KalturaBaseUser
 from KalturaClient.exceptions import KalturaException
 
 from rfa.kaltura2.kutils import kconnect
 from rfa.kaltura2.kutils import KalturaLoggerInstance as logger
-from rfa.kaltura2.kutils import uploadVideo
 from rfa.kaltura2.kutils import rejectVideo
 from rfa.kaltura2.kutils import uploadThumbnail
-from rfa.kaltura2.kutils import createVideo, removeVideo
-from rfa.kaltura2.kutils import kdiff
 from rfa.kaltura2.kutils import setModerationStatus
 from rfa.kaltura2.kutils import syncCategories
 
 from rfa.kaltura2.adapters.kalturaMediaEntry import IKalturaMediaEntryProvider
 from rfa.kaltura2.kaltura_video import IKaltura_Video
+
+import transaction
 
 def addVideo(context, event):
     """When a video is added to a container
@@ -27,11 +30,8 @@ def addVideo(context, event):
     mediaEntry = IKalturaMediaEntryProvider(context).getEntry()
     (client, session) = kconnect()
 
-    #Do the upload of the video file
-    uploadTokenId = uploadVideo(context, client)
-
     #associate the upload with this mediaEntry
-    mediaEntry = client.media.addFromUploadedFile(mediaEntry, uploadTokenId)
+    mediaEntry = client.media.addFromUploadedFile(mediaEntry, context.upload_token_id)
 
     #associate the KalturaMediaObject with the Plone Video
     context.KalturaObject = mediaEntry
@@ -42,6 +42,30 @@ def addVideo(context, event):
     #make sure categories set in Plone are set for this MediaEntry
     syncCategories(context, client)
 
+    #Try to set the id of the kaltura video based on the filename of the uploaded file.
+    new_name = context.REQUEST.form.get('video_file_name')
+
+    if new_name:
+        # Gleefully stolen from plone.app.dexterity.behaviors.id
+        context = aq_inner(context)
+        parent = aq_parent(context)
+        if parent is None:
+            # Object hasn't been added to graph yet; just set directly
+            context.id = new_name
+            return
+        new_id = INameChooser(parent).chooseName(new_name, context)
+        if getattr(aq_base(context), 'id', None):
+            transaction.savepoint()
+            locked = False
+            lockable = ILockable(context, None)
+            if lockable is not None and lockable.locked():
+                locked = True
+                lockable.unlock()
+            parent.manage_renameObject(context.getId(), new_id)
+            if locked:
+                lockable.lock()
+        else:
+            context.id = new_id
 
 def modifyVideo(context, event):
     """Fired when the object is edited
@@ -54,21 +78,18 @@ def modifyVideo(context, event):
     thumbnail_changed = False
 
     if hasattr(event, 'descriptions') and event.descriptions:
-        for d in event.descriptions:
-            if d.interface is IKaltura_Video and 'video_file' in d.attributes:
+        for descr in event.descriptions:
+            if descr.interface is IKaltura_Video and 'upload_token_id' in descr.attributes:
                 file_changed = True
-            if d.interface is IKaltura_Video and 'custom_thumbnail' in d.attributes:
+            if descr.interface is IKaltura_Video and 'custom_thumbnail' in descr.attributes:
                 thumbnail_changed = True
-    (client, session) = kconnect()
 
+    (client, session) = kconnect()
     mediaEntry = client.media.update(entryId, newMediaEntry)
     context.KalturaObject = mediaEntry
 
     if file_changed:
-        logger.log('uploading new video for %s' % (context.getId(),),
-               level=logging.WARN)
-
-        uploadTokenId = uploadVideo(context, client)
+        uploadTokenId = context.upload_token_id
         resource = KalturaUploadedFileTokenResource()
         resource.setToken(uploadTokenId)
         try:

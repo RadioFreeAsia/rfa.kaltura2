@@ -4,18 +4,29 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
     i18n_domain="rfa.kaltura2">
 
   <i18n:registerTranslations directory="locales" />
 
-  <include package=".browser" />
-  <include package=".events" />
-  <include package=".adapters" />
-
   <include file="permissions.zcml" />
   <include file="upgrades.zcml" />
 
-  
+  <include package=".browser" />
+  <include package=".events" />
+  <include package=".adapters" />
+  <include package=".api" />
+
+
+
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".interfaces.IUploadFileWidget"
+      layer="rfa.kaltura2.interfaces.IRfaKaltura2Layer"
+      template="file_upload_input.pt"
+  />
+
   <!-- Control panel / configuration page -->
   <browser:page
       name="rfa-kaltura-settings"
@@ -23,7 +34,7 @@
       class=".controlpanel.SettingsControlPanel"
       permission="cmf.ManagePortal"
    />
-   
+
   <genericsetup:registerProfile
       name="default"
       title="rfa.kaltura2"

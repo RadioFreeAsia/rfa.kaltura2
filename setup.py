@@ -14,7 +14,7 @@ long_description = '\n\n'.join([
 
 setup(
     name='rfa.kaltura2',
-    version='1.0a1',
+    version='2.1a',
     description="Kaltura Integration for Plone 5 and Python 3",
     long_description=long_description,
     # Get more from https://pypi.org/classifiers/

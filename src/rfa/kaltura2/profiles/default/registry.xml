@@ -1,22 +1,17 @@
 <?xml version="1.0"?>
-<registry
-    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    i18n:domain="rfa.kaltura2">
+<registry xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="rfa.kaltura2">
 
-    <records interface="rfa.kaltura2.controlpanel.IRfaKalturaSettings">
-    </records>
+   <records interface="rfa.kaltura2.controlpanel.IRfaKalturaSettings">
+   </records>
 
-   <!--  Bundle defined, but not used.
-    <records prefix="plone.bundles/rfa.kaltura"
-             interface='Products.CMFPlone.interfaces.IBundleRegistry'>
-    <value key="enabled">True</value>
-    <value key="jscompilation">++resource++mycustom.js</value>
-    <value key="csscompilation">++resource++mycustom.css</value>
+   <records prefix="plone.resources/kalturaFileUploader" interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++plone++rfa.kaltura2/js/kalturaFileUploader.js</value>
+      <value key="css">
+         <element>++plone++rfa.kaltura2/css/jquery.fileupload-ui.css</element>
+         <element>++plone++rfa.kaltura2/css/jquery.fileupload-ui-kaltura.css</element>
+         <element>++plone++rfa.kaltura2/css/style.css</element>
+      </value>
+   </records>
 
-    <value key="last_compilation">2019-11-26 00:00:00</value>
-    <value key="compile">False</value>
-    <value key="depends">plone</value>
-  </records>
-   -->
 </registry>
 

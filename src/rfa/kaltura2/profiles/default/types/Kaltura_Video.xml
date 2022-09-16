@@ -28,7 +28,6 @@
 
   <property name="behaviors" purge="false">
     <element value="plone.publication" />
-    <element value="plone.app.dexterity.behaviors.filename.INameFromFileName" />
   </property>
 
   <property name="schema">rfa.kaltura2.kaltura_video.IKaltura_Video</property>

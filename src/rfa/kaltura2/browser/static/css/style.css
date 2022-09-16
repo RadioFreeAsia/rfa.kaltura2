@@ -1,0 +1,37 @@
+#fileuploadBtn {
+    background-color: #2385c4;
+    border-color: #1b6899;
+    color: #fff;
+    border-radius: 4px;
+}
+
+#fileuploadBtn:hover {
+    background-color: #1b6899;
+    border-color: #124465;
+    color: #fff;
+}
+
+.cancelBtn {
+    background-color: #d9534f;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.cancelBtn:hover {
+    background-color: #da3833;
+    color: #fff;
+}
+
+#successmsg {
+    padding: 1rem;
+    text-align: center;
+}
+
+.warningMsg {
+    display: block;
+    margin: 1rem 0;
+}
+
+.successFileName {
+    display: block;
+}
