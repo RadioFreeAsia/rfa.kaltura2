@@ -22,18 +22,12 @@ Examples
 --------
 
 Most video content at www.rfa.org is stored on Kaltura but rendered through Plone CMS.
-New Videos can be created in Plone and Videos can be treated like any other content type in Plone, yet the storage, transcoding, and html5/flash/js players are configured in Kaltura.
+New Videos can be created in Plone and Videos can be treated like any other content type in Plone, yet storage, transcoding, players and delivery are configured in Kaltura.
 
 Documentation
 -------------
 
-Full documentation for end users can be found in the "docs" folder, and is also available online at http://docs.plone.org/foo/bar
-
-
-Translations
-------------
-
-This product has yet to be translated to any language.
+Documentation is lacking.  I'm sorry.
 
 
 Installation
@@ -63,10 +57,10 @@ Contribute
 Support
 -------
 
-If you are having issues, please let us know through the plone community forums.
+If you are having issues, please let us know through the plone community forums.  Tag @flipmcf 
 
 
 License
 -------
 
-The project is licensed under the GPLv2.
+The project is licensed under the GPLv2.  copyright both Radio Free Asia and Michael McFadden (flipmcf)
