@@ -19,7 +19,7 @@ async function getKsToken() {
         $('#fileuploadBtn').attr('disabled', 'disabled');
         $('#successmsg').removeClass('hidden');
         $('#successmsg').children()[1].innerHTML = `<strong>There was an internal error </strong>.
-        <br/>Please take a screenshot and report this incedent to webtech@rfa.org. 
+        <br/>Please take a screenshot and report this incident to your administrator.
         <br/> ${e}
         <br/><strong>To continue reload this page and try again.</strong>`
     }
