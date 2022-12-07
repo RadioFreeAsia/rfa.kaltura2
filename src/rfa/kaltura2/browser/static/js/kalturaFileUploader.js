@@ -10,8 +10,19 @@ function appendStyle(url) {
 
 async function getKsToken() {
     const responce = await fetch('./getKs');
-    const data = await responce.json();
-    KALTURA_SESSION_TOKEN = data.ks;
+    try {
+        const data = await responce.json();
+        KALTURA_SESSION_TOKEN = data.ks;
+        if(!data.ks || !data.ks.length) throw new Error("Kultura Session Token is empty")
+    } catch(e) {
+        console.error(e);
+        $('#fileuploadBtn').attr('disabled', 'disabled');
+        $('#successmsg').removeClass('hidden');
+        $('#successmsg').children()[1].innerHTML = `<strong>There was an internal error </strong>.
+        <br/>Please take a screenshot and report this incedent to webtech@rfa.org. 
+        <br/> ${e}
+        <br/><strong>To continue reload this page and try again.</strong>`
+    }
 }
 
 appendStyle('++plone++rfa.kaltura2/css/jquery.fileupload-ui.css');
