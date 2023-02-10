@@ -23,7 +23,7 @@
   <z3c:widgetTemplate
       mode="input"
       widget=".interfaces.IUploadFileWidget"
-      layer="rfa.kaltura2.interfaces.IRfaKaltura2Layer"
+      layer="z3c.form.interfaces.IFormLayer"
       template="file_upload_input.pt"
   />
 
