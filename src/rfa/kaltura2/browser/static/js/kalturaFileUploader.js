@@ -51,8 +51,9 @@ require([
     fileuploadKalturaBase
 ) {
 
-    // runs when the video already exists
-    if ($('#upload-token-container > input').val().length) {
+    // runs when the video is in edit mode
+    if (window.location.pathname.includes('/edit')) {
+        $(`<span class='warningMsg'>You already have a file uploaded.</span>`).insertBefore("#uploadbutton");
 
         // change btn label
         $('#fileuploadBtn')[0].childNodes[0].nodeValue = 'Click here to upload a new file';
@@ -61,22 +62,23 @@ require([
             $('#upload-token-container > input').val('');
         })
 
-        // lookup video file information from the upload token
-        $.ajax({
-            url: `https://www.kaltura.com/api_v3/service/uploadtoken/action/get?
-            ks=${KALTURA_SESSION_TOKEN}&format=1`,
-            data: { uploadTokenId: $('#upload-token-container > input').val() },
-            type: "POST",
-            dataType: 'json'
-        }).done((response) => {
-            $(`<span class='warningMsg'>
-                    You already have a file selected: 
-                    <strong>${response.fileName}</strong>
-                </span>`)
-            .insertBefore("#uploadbutton");
-            $('#file-name-container > input').val(response.fileName);
-
-        });
+        // run only if the token is available
+        if ($('#upload-token-container > input').val().length) {
+            // lookup video file information from the upload token
+            $.ajax({
+                url: `https://www.kaltura.com/api_v3/service/uploadtoken/action/get?
+                ks=${KALTURA_SESSION_TOKEN}&format=1`,
+                data: { uploadTokenId: $('#upload-token-container > input').val() },
+                type: "POST",
+                dataType: 'json'
+            }).done((response) => {
+                $('.warningMsg').html(
+                    `You already have a file selected: 
+                    <strong>${response.fileName}</strong>`
+                )
+                $('#file-name-container > input').val(response.fileName);
+            });
+        }
     }
 
     const categoryId = -1;
