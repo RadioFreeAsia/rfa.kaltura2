@@ -42,9 +42,9 @@
     $.widget('blueimp.fileupload', $.blueimp.fileupload, {
         options: {
             ks:null,
-            apiURL:'http://www.kaltura.com/api_v3/',
-            url: 'http://www.kaltura.com/api_v3/?service=uploadToken&action=upload&format=1',
-			host: 'http://www.kaltura.com',
+            apiURL:'https://www.kaltura.com/api_v3/',
+            url: 'https://www.kaltura.com/api_v3/?service=uploadToken&action=upload&format=1',
+			host: 'https://www.kaltura.com',
             chunkbefore: function (e, data) {
 				var isLastChunk = data.maxChunkSize -  data.chunkSize >  0;
                 var isFirstChunk = data.uploadedBytes == 0;
